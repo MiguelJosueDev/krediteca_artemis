@@ -1,3 +1,309 @@
+==================================================
+ESTRUCTURA GENERAL DEL PROYECTO
+==================================================
+.
+ |-- jsconfig.json
+ |-- tailwind.config.js
+ |-- attribution.db-wal
+ |-- attribution.db-shm
+ |-- attribution.db
+ |-- postcss.config.mjs
+ |-- contexto_proyecto_artemis.txt
+ |-- next.config.mjs
+ |-- README.md
+ |-- sanity
+ | |-- schemas
+ | | |-- author.js
+ | | |-- post.js
+ |-- public
+ | |-- krediteca_logo_navbar.png
+ | |-- krediteca-logo-horizontal.png
+ |-- package-lock.json
+ |-- package.json
+ |-- consolidar_contexto.sh
+ |-- scripts
+ | |-- migrate-to-sanity.js
+ | |-- output.ndjson
+ |-- eslint.config.mjs
+ |-- src
+ | |-- app
+ | | |-- sitemap.js
+ | | |-- feed.xml
+ | | | |-- route.js
+ | | |-- layout.js
+ | | |-- favicon.ico
+ | | |-- calculadoras
+ | | | |-- cat
+ | | | | |-- page.js
+ | | | |-- capacidad
+ | | | | |-- page.js
+ | | | |-- page.js
+ | | | |-- consolidacion
+ | | | | |-- page.js
+ | | | |-- prestamos
+ | | | | |-- page.js
+ | | |-- page.js
+ | | |-- contacto
+ | | | |-- page.js
+ | | |-- blog
+ | | | |-- page.js
+ | | | |-- [categoria]
+ | | | | |-- page.js
+ | | | | |-- [slug]
+ | | |-- components
+ | | | |-- mdx
+ | | | | |-- OfferCard.js
+ | | | | |-- Disclaimer.js
+ | | | | |-- index.js
+ | | | | |-- Callout.js
+ | | | |-- TrustBadges.js
+ | | | |-- CompareButton.js
+ | | | |-- Features.js
+ | | | |-- TopLoans.js
+ | | | |-- Header.js
+ | | | |-- Hero.js
+ | | | |-- ContactForm.js
+ | | | |-- Footer.js
+ | | |-- private
+ | | | |-- dashboard
+ | | | | |-- page.js
+ | | |-- comparador
+ | | | |-- page.js
+ | | |-- robots.js
+ | | |-- api
+ | | | |-- go
+ | | | | |-- [id]
+ | | | |-- postback
+ | | | | |-- leadgid
+ | | |-- globals.css
+ | |-- content
+ | | |-- authors
+ | | | |-- laura-gomez.json
+ | | |-- blog
+ | | | |-- prestamos
+ | | | | |-- como-comparar-cat.mdx
+ | |-- lib
+ | | |-- db.js
+ | | |-- blog.js
+ | | |-- affiliates
+ | | | |-- leadgid.js
+ | | | |-- redirect-map.js
+
+==================================================RUTA: ./jsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+
+==================================================RUTA: ./tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        navy: {
+          50: '#f0f3f9',
+          100: '#dae1ef',
+          200: '#b8c5df',
+          300: '#8ea3ca',
+          400: '#6680b2',
+          500: '#4a6399',
+          600: '#3a4f7d',
+          700: '#2e3f63',
+          800: '#1a2744',
+          900: '#0B1B3F',
+          950: '#060e22',
+        },
+        teal: {
+          50: '#eefcfa',
+          100: '#d5f7f2',
+          200: '#afeee7',
+          300: '#7ae0d6',
+          400: '#46cbbf',
+          500: '#14b8a6',
+          600: '#0d9488',
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+        },
+        surface: {
+          50: '#ffffff',
+          100: '#f8f9fb',
+          200: '#f1f3f6',
+          300: '#e5e8ed',
+          400: '#d1d5dc',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      borderRadius: {
+        '4xl': '2rem',
+      },
+      boxShadow: {
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03)',
+        'card-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+        'elevated': '0 8px 24px 0 rgba(0, 0, 0, 0.08), 0 2px 8px -1px rgba(0, 0, 0, 0.04)',
+      },
+    },
+  },
+  plugins: [],
+}
+==================================================RUTA: ./sanity/schemas/author.js
+export default {
+  name: "author",
+  title: "Author",
+  type: "document",
+  fields: [
+    {
+      name: "id",
+      title: "ID",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "name",
+      title: "Name",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "role",
+      title: "Role",
+      type: "string",
+    },
+    {
+      name: "bio",
+      title: "Bio",
+      type: "text",
+    },
+    {
+      name: "avatar",
+      title: "Avatar URL",
+      type: "url",
+    },
+    {
+      name: "linkedin",
+      title: "LinkedIn URL",
+      type: "url",
+    },
+    {
+      name: "twitter",
+      title: "Twitter URL",
+      type: "url",
+    },
+  ],
+}
+
+==================================================RUTA: ./sanity/schemas/post.js
+export default {
+  name: "post",
+  title: "Blog Post",
+  type: "document",
+  fields: [
+    {
+      name: "title",
+      title: "Title",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "title" },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "description",
+      title: "Description",
+      type: "text",
+    },
+    {
+      name: "category",
+      title: "Category",
+      type: "string",
+    },
+    {
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [{ type: "string" }],
+    },
+    {
+      name: "author",
+      title: "Author",
+      type: "reference",
+      to: [{ type: "author" }],
+    },
+    {
+      name: "reviewedBy",
+      title: "Reviewed By",
+      type: "reference",
+      to: [{ type: "author" }],
+    },
+    {
+      name: "publishedAt",
+      title: "Published At",
+      type: "datetime",
+    },
+    {
+      name: "updatedAt",
+      title: "Updated At",
+      type: "datetime",
+    },
+    {
+      name: "image",
+      title: "Featured Image URL",
+      type: "url",
+    },
+    {
+      name: "draft",
+      title: "Is Draft?",
+      type: "boolean",
+    },
+    {
+      name: "body",
+      title: "Body",
+      type: "array",
+      of: [
+        { type: "block" },
+        {
+          type: "object",
+          name: "callout",
+          title: "Callout",
+          fields: [
+            { name: "type", type: "string" },
+            { name: "title", type: "string" },
+            { name: "text", type: "text" },
+          ],
+        },
+        {
+          type: "object",
+          name: "disclaimer",
+          title: "Disclaimer",
+          fields: [{ name: "text", type: "text" }],
+        },
+        {
+          type: "object",
+          name: "offerCard",
+          title: "Offer Card",
+          fields: [{ name: "slug", type: "string" }],
+        },
+      ],
+    },
+  ],
+}
+
+==================================================RUTA: ./package-lock.json
 {
   "name": "krediteca_website",
   "version": "0.1.0",
@@ -23,17 +329,11 @@
       },
       "devDependencies": {
         "@eslint/eslintrc": "^3",
-        "@types/better-sqlite3": "^7.6.13",
-        "@types/node": "^25.9.2",
-        "@types/react": "^19.2.17",
-        "@types/react-dom": "^19.2.3",
         "autoprefixer": "^10.4.21",
         "eslint": "^9",
         "eslint-config-next": "15.3.5",
         "postcss": "^8.5.6",
         "tailwindcss": "^3.4.4",
-        "typescript": "^5.9.3",
-        "vite-tsconfig-paths": "^6.1.1",
         "vitest": "^4.1.6"
       }
     },
@@ -1420,16 +1720,6 @@
         "tslib": "^2.4.0"
       }
     },
-    "node_modules/@types/better-sqlite3": {
-      "version": "7.6.13",
-      "resolved": "https://registry.npmjs.org/@types/better-sqlite3/-/better-sqlite3-7.6.13.tgz",
-      "integrity": "sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "@types/node": "*"
-      }
-    },
     "node_modules/@types/chai": {
       "version": "5.2.3",
       "resolved": "https://registry.npmjs.org/@types/chai/-/chai-5.2.3.tgz",
@@ -1516,33 +1806,14 @@
       "integrity": "sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==",
       "license": "MIT"
     },
-    "node_modules/@types/node": {
-      "version": "25.9.2",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-25.9.2.tgz",
-      "integrity": "sha512-G05zqtJhcDLb8uslf5EjCxXg9G1KQxiV8OS0R26IC//Eoyitzqe8z37I7cqvnZlrlSfgocQRfSn/AHBZJJFyGw==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "undici-types": ">=7.24.0 <7.24.7"
-      }
-    },
     "node_modules/@types/react": {
-      "version": "19.2.17",
-      "resolved": "https://registry.npmjs.org/@types/react/-/react-19.2.17.tgz",
-      "integrity": "sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==",
+      "version": "19.2.14",
+      "resolved": "https://registry.npmjs.org/@types/react/-/react-19.2.14.tgz",
+      "integrity": "sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==",
       "license": "MIT",
+      "peer": true,
       "dependencies": {
         "csstype": "^3.2.2"
-      }
-    },
-    "node_modules/@types/react-dom": {
-      "version": "19.2.3",
-      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.3.tgz",
-      "integrity": "sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==",
-      "dev": true,
-      "license": "MIT",
-      "peerDependencies": {
-        "@types/react": "^19.2.0"
       }
     },
     "node_modules/@types/unist": {
@@ -3092,7 +3363,8 @@
       "version": "3.2.3",
       "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
       "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
-      "license": "MIT"
+      "license": "MIT",
+      "peer": true
     },
     "node_modules/damerau-levenshtein": {
       "version": "1.0.8",
@@ -4492,13 +4764,6 @@
       "funding": {
         "url": "https://github.com/sponsors/ljharb"
       }
-    },
-    "node_modules/globrex": {
-      "version": "0.1.2",
-      "resolved": "https://registry.npmjs.org/globrex/-/globrex-0.1.2.tgz",
-      "integrity": "sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==",
-      "dev": true,
-      "license": "MIT"
     },
     "node_modules/gopd": {
       "version": "1.2.0",
@@ -8915,27 +9180,6 @@
       "dev": true,
       "license": "Apache-2.0"
     },
-    "node_modules/tsconfck": {
-      "version": "3.1.6",
-      "resolved": "https://registry.npmjs.org/tsconfck/-/tsconfck-3.1.6.tgz",
-      "integrity": "sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==",
-      "dev": true,
-      "license": "MIT",
-      "bin": {
-        "tsconfck": "bin/tsconfck.js"
-      },
-      "engines": {
-        "node": "^18 || >=20"
-      },
-      "peerDependencies": {
-        "typescript": "^5.0.0"
-      },
-      "peerDependenciesMeta": {
-        "typescript": {
-          "optional": true
-        }
-      }
-    },
     "node_modules/tsconfig-paths": {
       "version": "3.15.0",
       "resolved": "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.15.0.tgz",
@@ -9059,11 +9303,12 @@
       }
     },
     "node_modules/typescript": {
-      "version": "5.9.3",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
-      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz",
+      "integrity": "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==",
       "dev": true,
       "license": "Apache-2.0",
+      "peer": true,
       "bin": {
         "tsc": "bin/tsc",
         "tsserver": "bin/tsserver"
@@ -9090,13 +9335,6 @@
       "funding": {
         "url": "https://github.com/sponsors/ljharb"
       }
-    },
-    "node_modules/undici-types": {
-      "version": "7.24.6",
-      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.24.6.tgz",
-      "integrity": "sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==",
-      "dev": true,
-      "license": "MIT"
     },
     "node_modules/unified": {
       "version": "11.0.5",
@@ -9428,21 +9666,6 @@
         }
       }
     },
-    "node_modules/vite-tsconfig-paths": {
-      "version": "6.1.1",
-      "resolved": "https://registry.npmjs.org/vite-tsconfig-paths/-/vite-tsconfig-paths-6.1.1.tgz",
-      "integrity": "sha512-2cihq7zliibCCZ8P9cKJrQBkfgdvcFkOOc3Y02o3GWUDLgqjWsZudaoiuOwO/gzTzy17cS5F7ZPo4bsnS4DGkg==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "debug": "^4.1.1",
-        "globrex": "^0.1.2",
-        "tsconfck": "^3.0.3"
-      },
-      "peerDependencies": {
-        "vite": "*"
-      }
-    },
     "node_modules/vite/node_modules/picomatch": {
       "version": "4.0.4",
       "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.4.tgz",
@@ -9737,3 +9960,3927 @@
     }
   }
 }
+
+==================================================RUTA: ./package.json
+{
+  "name": "krediteca_website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.9.0",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^0.525.0",
+    "next": "15.3.5",
+    "next-mdx-remote": "^6.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "reading-time": "^1.5.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "server-only": "^0.0.1",
+    "uuid": "^14.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.4",
+    "vitest": "^4.1.6"
+  }
+}
+
+==================================================RUTA: ./scripts/migrate-to-sanity.js
+const fs = require("fs")
+const path = require("path")
+const matter = require("gray-matter")
+const CONTENT_DIR = path.join(__dirname, "../src/content")
+const BLOG_DIR = path.join(CONTENT_DIR, "blog")
+const AUTHORS_DIR = path.join(CONTENT_DIR, "authors")
+const OUTPUT_FILE = path.join(__dirname, "output.ndjson")
+// Helper to generate a random key for Sanity blocks
+function genKey() {
+  return Math.random().toString(36).substring(2, 10)
+}
+function processAuthors() {
+  const authors = []
+  if (!fs.existsSync(AUTHORS_DIR)) return authors
+  const files = fs.readdirSync(AUTHORS_DIR).filter((f) => f.endsWith(".json"))
+  for (const file of files) {
+    const data = JSON.parse(fs.readFileSync(path.join(AUTHORS_DIR, file), "utf8"))
+    authors.push({
+      _id: `author-${data.id}`,
+      _type: "author",
+      id: data.id,
+      name: data.name,
+      role: data.role,
+      bio: data.bio,
+      avatar: data.avatar,
+      linkedin: data.linkedin,
+      twitter: data.twitter,
+    })
+  }
+  return authors
+}
+function markdownToPortableText(markdown) {
+  const blocks = []
+  
+  // A very rough parser for the Dry-Run.
+  // In production, @portabletext/remark-slate or a proper AST parser should be used.
+  const lines = markdown.split("\n")
+  
+  let currentParagraph = []
+  
+  function flushParagraph() {
+    if (currentParagraph.length > 0) {
+      blocks.push({
+        _type: "block",
+        _key: genKey(),
+        style: "normal",
+        markDefs: [],
+        children: [{ _type: "span", _key: genKey(), text: currentParagraph.join("\n").trim(), marks: [] }]
+      })
+      currentParagraph = []
+    }
+  }
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    // Catch <OfferCard slug="xxx" />
+    const offerMatch = line.match(/<OfferCard\s+slug=["']([^"']+)["']\s*\/>/)
+    if (offerMatch) {
+      flushParagraph()
+      blocks.push({
+        _type: "offerCard",
+        _key: genKey(),
+        slug: offerMatch[1]
+      })
+      continue
+    }
+    // Catch <Disclaimer text="xxx" />
+    const disclaimerMatch = line.match(/<Disclaimer\s+text=["']([^"']+)["']\s*\/>/)
+    if (disclaimerMatch) {
+      flushParagraph()
+      blocks.push({
+        _type: "disclaimer",
+        _key: genKey(),
+        text: disclaimerMatch[1]
+      })
+      continue
+    }
+    // Catch <Callout ...>
+    if (line.includes("<Callout")) {
+      flushParagraph()
+      const typeMatch = line.match(/type=["']([^"']+)["']/)
+      const titleMatch = line.match(/title=["']([^"']+)["']/)
+      
+      let calloutText = ""
+      i++ // Skip opening tag line
+      while (i < lines.length && !lines[i].includes("</Callout>")) {
+        calloutText += lines[i] + "\n"
+        i++
+      }
+      blocks.push({
+        _type: "callout",
+        _key: genKey(),
+        type: typeMatch ? typeMatch[1] : "info",
+        title: titleMatch ? titleMatch[1] : "",
+        text: calloutText.trim()
+      })
+      continue
+    }
+    // Headers
+    const headerMatch = line.match(/^(#{1,6})\s+(.*)/)
+    if (headerMatch) {
+      flushParagraph()
+      blocks.push({
+        _type: "block",
+        _key: genKey(),
+        style: `h${headerMatch[1].length}`,
+        markDefs: [],
+        children: [{ _type: "span", _key: genKey(), text: headerMatch[2], marks: [] }]
+      })
+      continue
+    }
+    // Normal text
+    if (line.trim() === "") {
+      flushParagraph()
+    } else {
+      currentParagraph.push(line)
+    }
+  }
+  
+  flushParagraph()
+  return blocks
+}
+function processPosts() {
+  const posts = []
+  if (!fs.existsSync(BLOG_DIR)) return posts
+  const categories = fs.readdirSync(BLOG_DIR)
+  for (const category of categories) {
+    const categoryPath = path.join(BLOG_DIR, category)
+    if (!fs.statSync(categoryPath).isDirectory()) continue
+    const files = fs.readdirSync(categoryPath).filter(file => file.endsWith('.mdx') || file.endsWith('.md'))
+    for (const file of files) {
+      const slug = file.replace(/\.mdx?$/, "")
+      const filePath = path.join(categoryPath, file)
+      const { data, content } = matter(fs.readFileSync(filePath, "utf8"))
+      posts.push({
+        _id: `post-${slug}`,
+        _type: "post",
+        title: data.title,
+        slug: { _type: "slug", current: slug },
+        description: data.description,
+        category: data.category,
+        tags: data.tags || [],
+        author: data.author ? { _type: "reference", _ref: `author-${data.author}` } : undefined,
+        reviewedBy: data.reviewedBy ? { _type: "reference", _ref: `author-${data.reviewedBy}` } : undefined,
+        publishedAt: data.publishedAt,
+        updatedAt: data.updatedAt,
+        image: data.image,
+        draft: data.draft || false,
+        body: markdownToPortableText(content)
+      })
+    }
+  }
+  return posts
+}
+function main() {
+  const authors = processAuthors()
+  const posts = processPosts()
+  
+  const allDocs = [...authors, ...posts]
+  
+  // Create ndjson content
+  const ndjson = allDocs.map(doc => JSON.stringify(doc)).join("\n")
+  
+  fs.writeFileSync(OUTPUT_FILE, ndjson, "utf8")
+  console.log(`✅ Migration Dry-Run Complete!`)
+  console.log(`✅ Extracted ${authors.length} authors and ${posts.length} posts.`)
+  console.log(`✅ Output written to: ${OUTPUT_FILE}`)
+}
+main()
+
+==================================================RUTA: ./src/app/sitemap.js
+import { getAllPosts } from "@/lib/blog"
+export default function sitemap() {
+  const baseUrl = "https://krediteca.com"
+  const posts = getAllPosts()
+  const staticRoutes = [
+    "",
+    "/comparador",
+    "/calculadoras",
+    "/calculadoras/prestamos",
+    "/calculadoras/cat",
+    "/calculadoras/capacidad",
+    "/calculadoras/consolidacion",
+    "/blog",
+    "/contacto",
+  ]
+  const staticUrls = staticRoutes.map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: route === "/blog" ? "daily" : "weekly",
+    priority: route === "" ? 1.0 : 0.8,
+  }))
+  const postUrls = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.category}/${post.slug}`,
+    lastModified: new Date(post.frontmatter.updatedAt || post.frontmatter.publishedAt).toISOString(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }))
+  return [...staticUrls, ...postUrls]
+}
+
+==================================================RUTA: ./src/app/feed.xml/route.js
+import { getAllPosts } from "@/lib/blog"
+import { NextResponse } from "next/server"
+export async function GET() {
+  const posts = getAllPosts()
+  const site_url = "https://krediteca.com"
+  const feedItems = posts.map((post) => {
+    return `
+    <item>
+      <title><![CDATA[${post.frontmatter.title}]]></title>
+      <link>${site_url}/blog/${post.category}/${post.slug}</link>
+      <guid>${site_url}/blog/${post.category}/${post.slug}</guid>
+      <pubDate>${new Date(post.frontmatter.publishedAt).toUTCString()}</pubDate>
+      <description><![CDATA[${post.frontmatter.description}]]></description>
+      ${post.frontmatter.image ? `<enclosure url="${post.frontmatter.image}" type="image/jpeg" />` : ""}
+    </item>
+    `
+  }).join("")
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>Krediteca Blog</title>
+      <link>${site_url}</link>
+      <description>Comparador financiero en México. Guías y artículos sobre finanzas personales.</description>
+      <language>es-MX</language>
+      <atom:link href="${site_url}/feed.xml" rel="self" type="application/rss+xml" />
+      ${feedItems}
+    </channel>
+  </rss>`
+  return new NextResponse(xml, {
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "s-maxage=86400, stale-while-revalidate",
+    },
+  })
+}
+
+==================================================RUTA: ./src/app/layout.js
+import { Inter } from "next/font/google";
+import "./globals.css";
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+export const metadata = {
+  metadataBase: new URL("https://krediteca.com"),
+  title: {
+    default: "Krediteca · Comparador Financiero en México",
+    template: "%s | Krediteca"
+  },
+  description:
+    "Compara tasas, plazos y requisitos reales de bancos y fintech mexicanas. Sin letras chiquitas, sin sorpresas.",
+  alternates: {
+    canonical: "/",
+  },
+};
+export default function RootLayout({ children }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": ["FinancialService", "Organization"],
+    name: "Krediteca",
+    url: "https://krediteca.com",
+    logo: "https://krediteca.com/krediteca_logo_navbar.png",
+    description: "Comparador financiero en México. Compara tasas, plazos y requisitos de préstamos personales y tarjetas de crédito.",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Av. Paseo de la Reforma 250",
+      addressLocality: "Ciudad de México",
+      addressRegion: "CDMX",
+      postalCode: "06600",
+      addressCountry: "MX"
+    },
+    sameAs: [
+      "https://www.linkedin.com/company/krediteca",
+      "https://twitter.com/krediteca"
+    ]
+  };
+  return (
+    <html lang="es">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className={`${inter.variable} font-sans antialiased`}>
+        {children}
+      </body>
+    </html>
+  );
+}
+
+==================================================RUTA: ./src/app/calculadoras/cat/page.js
+"use client"
+import { useState, useMemo } from "react"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+import { ShieldCheck, Info, RefreshCw, TrendingUp } from "lucide-react"
+export default function CATCalculatorPage() {
+  const [loanAmount, setLoanAmount] = useState(250000)
+  const [nominalRate, setNominalRate] = useState(10.5)
+  const [upfrontFees, setUpfrontFees] = useState(3500)
+  const [annualInsurance, setAnnualInsurance] = useState(1200)
+  // Simulation of CAT calculation (Approximation for demo purposes)
+  // In a real banking app, this would use an IRR (Internal Rate of Return) function
+  // based on an exact amortization schedule.
+  const calculatedCAT = useMemo(() => {
+    if (loanAmount <= 0) return 0;
+    
+    // Approximation formula
+    const feePercentage = (upfrontFees / loanAmount) * 100;
+    const insurancePercentage = (annualInsurance / loanAmount) * 100;
+    
+    // The compounding effect of monthly payments makes the effective rate higher than nominal
+    const effectiveRate = Math.pow(1 + (nominalRate / 100) / 12, 12) - 1;
+    const effectiveRatePct = effectiveRate * 100;
+    // Add amortized fees (assuming roughly a 2-3 year avg term for personal loans in this context)
+    // We multiply fees by a factor to simulate their heavier weight in short-term loans
+    const catApproximation = effectiveRatePct + (feePercentage * 1.5) + insurancePercentage;
+    return Number(catApproximation.toFixed(1));
+  }, [loanAmount, nominalRate, upfrontFees, annualInsurance])
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Calculadoras" />
+      <main className="flex-1 bg-surface-100 pb-20">
+        
+        {/* Header */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <ShieldCheck size={20} className="text-teal-600" />
+            <span className="text-sm font-bold text-teal-800 uppercase tracking-widest">
+              Herramienta de Transparencia
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 tracking-tight mb-4">
+            Costo Anual Total (CAT)
+          </h1>
+          <p className="text-base sm:text-lg text-navy-600 leading-relaxed max-w-3xl">
+            Descubre el verdadero costo de pedir prestado. El Costo Anual Total (CAT) integra las 
+            tasas nominales con comisiones ocultas y seguros obligatorios para proporcionar una métrica 
+            definitiva y transparente para una planificación financiera rigurosa.
+          </p>
+        </section>
+        {/* Simulator Grid */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* ── Left Column: Inputs ── */}
+            <div className="lg:col-span-6 space-y-6">
+              
+              <div className="bg-white rounded-[2rem] p-6 sm:p-10 border border-surface-300/60 shadow-card relative">
+                
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 bg-surface-200 rounded-xl flex items-center justify-center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-navy-700">
+                      <path d="M4 6h16M4 12h16M4 18h16" />
+                      <circle cx="8" cy="12" r="2" fill="currentColor" />
+                      <circle cx="16" cy="6" r="2" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold text-navy-900">Parámetros del Crédito</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                  
+                  {/* Loan Amount Input */}
+                  <div>
+                    <label className="flex items-center justify-between text-sm font-bold text-navy-800 mb-2">
+                      Monto del Préstamo
+                      <Info size={14} className="text-surface-400" />
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-semibold">$</span>
+                      <input 
+                        type="number"
+                        value={loanAmount}
+                        onChange={(e) => setLoanAmount(Number(e.target.value))}
+                        className="w-full bg-surface-100 border border-transparent focus:border-teal-500 focus:bg-white rounded-xl py-3 pl-8 pr-4 text-navy-900 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                      />
+                    </div>
+                  </div>
+                  {/* Nominal Rate Input */}
+                  <div>
+                    <label className="flex items-center justify-between text-sm font-bold text-navy-800 mb-2">
+                      Tasa Nominal
+                      <Info size={14} className="text-surface-400" />
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type="number"
+                        step="0.1"
+                        value={nominalRate}
+                        onChange={(e) => setNominalRate(Number(e.target.value))}
+                        className="w-full bg-surface-100 border border-transparent focus:border-teal-500 focus:bg-white rounded-xl py-3 px-4 text-navy-900 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-navy-500 font-semibold">%</span>
+                    </div>
+                  </div>
+                  {/* Upfront Fees Input */}
+                  <div>
+                    <label className="flex items-center justify-between text-sm font-bold text-navy-800 mb-2">
+                      Comisión por Apertura
+                      <Info size={14} className="text-surface-400" />
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-semibold">$</span>
+                      <input 
+                        type="number"
+                        value={upfrontFees}
+                        onChange={(e) => setUpfrontFees(Number(e.target.value))}
+                        className="w-full bg-surface-100 border border-transparent focus:border-teal-500 focus:bg-white rounded-xl py-3 pl-8 pr-4 text-navy-900 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                      />
+                    </div>
+                  </div>
+                  {/* Annual Insurance Input */}
+                  <div>
+                    <label className="flex items-center justify-between text-sm font-bold text-navy-800 mb-2">
+                      Seguro Anual
+                      <Info size={14} className="text-surface-400" />
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-semibold">$</span>
+                      <input 
+                        type="number"
+                        value={annualInsurance}
+                        onChange={(e) => setAnnualInsurance(Number(e.target.value))}
+                        className="w-full bg-surface-100 border border-transparent focus:border-teal-500 focus:bg-white rounded-xl py-3 pl-8 pr-4 text-navy-900 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <button className="flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
+                    Recalcular CAT
+                    <RefreshCw size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* ── Right Column: Outputs ── */}
+            <div className="lg:col-span-6 space-y-6">
+              
+              {/* The Real CAT Card */}
+              <div className="bg-navy-900 rounded-[2rem] p-10 text-center shadow-xl relative overflow-hidden flex flex-col items-center justify-center min-h-[280px]">
+                {/* Background glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <ShieldCheck size={16} className="text-teal-400" />
+                    <h3 className="text-xs font-bold text-navy-200 uppercase tracking-widest">
+                      EL CAT REAL
+                    </h3>
+                  </div>
+                  
+                  <div className="flex items-baseline justify-center mb-6">
+                    <span className="text-7xl sm:text-[5.5rem] font-bold text-white tracking-tighter">
+                      {calculatedCAT}
+                    </span>
+                    <span className="text-4xl sm:text-5xl text-teal-400 font-light ml-1">%</span>
+                  </div>
+                  <div className="inline-block bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium px-4 py-1.5 rounded-full">
+                    Efectivo Anualizado
+                  </div>
+                </div>
+              </div>
+              {/* Market Context Card */}
+              <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-sm">
+                <div className="flex items-center gap-3 mb-8">
+                  <TrendingUp size={24} className="text-navy-700" />
+                  <h3 className="text-xl font-bold text-navy-900">Contexto de Mercado</h3>
+                </div>
+                <div className="space-y-6">
+                  {/* Item 1 */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-teal-600"></div>
+                      <span className="text-sm font-semibold text-navy-700">Tu CAT Calculado</span>
+                    </div>
+                    <span className="text-lg font-bold text-navy-900">{calculatedCAT}%</span>
+                  </div>
+                  
+                  <div className="h-px w-full bg-surface-200"></div>
+                  {/* Item 2 */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-surface-400"></div>
+                      <span className="text-sm font-medium text-navy-600">Promedio Segmento Premium</span>
+                    </div>
+                    <span className="text-lg font-bold text-surface-400">15.8%</span>
+                  </div>
+                  <div className="h-px w-full bg-surface-200"></div>
+                  {/* Item 3 */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-surface-300"></div>
+                      <span className="text-sm font-medium text-navy-600">Promedio Nacional</span>
+                    </div>
+                    <span className="text-lg font-bold text-surface-400">22.4%</span>
+                  </div>
+                </div>
+                {/* Info Box */}
+                <div className="mt-8 bg-surface-100 rounded-xl p-4 flex gap-3 border border-surface-200">
+                  <ShieldCheck size={20} className="text-teal-600 shrink-0" />
+                  <p className="text-[11px] sm:text-xs text-navy-600 leading-relaxed">
+                    Este cálculo se adhiere a las directrices nacionales de transparencia financiera, 
+                    asegurando que todas las comisiones y seguros obligatorios se reflejen en la tasa.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/calculadoras/capacidad/page.js
+"use client"
+import { useState, useMemo } from "react"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+import { Banknote, Home, CreditCard, Activity, TrendingUp } from "lucide-react"
+export default function PaymentCapacityPage() {
+  const [income, setIncome] = useState(6500)
+  const [housing, setHousing] = useState(2200)
+  const [utilities, setUtilities] = useState(450)
+  const [debts, setDebts] = useState(850)
+  const { availableCapacity, dti, status } = useMemo(() => {
+    const expenses = housing + utilities + debts
+    let capacity = income - expenses
+    if (capacity < 0) capacity = 0
+    // DTI is typically (Housing + Debt) / Income
+    let ratio = 0
+    if (income > 0) {
+      ratio = ((housing + debts) / income) * 100
+    }
+    let status = { text: "Saludable", color: "text-teal-600", bg: "bg-teal-600", stroke: "#0D9488" }
+    if (ratio > 43) {
+      status = { text: "Peligro", color: "text-red-500", bg: "bg-red-500", stroke: "#EF4444" }
+    } else if (ratio > 35) {
+      status = { text: "Precaución", color: "text-amber-500", bg: "bg-amber-500", stroke: "#F59E0B" }
+    }
+    return {
+      availableCapacity: capacity,
+      dti: Math.round(ratio),
+      status
+    }
+  }, [income, housing, utilities, debts])
+  // SVG Semi-circle logic
+  const radius = 60
+  const circumference = Math.PI * radius // semi-circle is just PI * r
+  // dashoffset for semi-circle filling (0 is full, circumference is empty)
+  // map DTI (0-100) to semi-circle (0-180 degrees)
+  let fillPercentage = dti / 100
+  if (fillPercentage > 1) fillPercentage = 1
+  const strokeDashoffset = circumference - (fillPercentage * circumference)
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Calculadoras" />
+      <main className="flex-1 bg-surface-100 pb-20">
+        
+        {/* Header */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 tracking-tight mb-4">
+            Herramienta de Capacidad de Pago
+          </h1>
+          <p className="text-base sm:text-lg text-navy-600 leading-relaxed max-w-3xl">
+            Descubre tu verdadero ancho de banda financiero. Ingresa tus datos a continuación para 
+            obtener una visión clara y transparente de cuánto compromiso adicional puedes manejar 
+            cómodamente.
+          </p>
+        </section>
+        {/* Simulator Grid */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* ── Left Column: Inputs ── */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Income Section */}
+              <div className="bg-white rounded-[2rem] p-6 sm:p-8 border border-surface-300/60 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                
+                <div className="flex items-center gap-3 mb-6 relative z-10">
+                  <Banknote size={20} className="text-teal-600" />
+                  <h3 className="text-lg font-bold text-navy-900">Ingreso Mensual</h3>
+                </div>
+                <div className="relative z-10">
+                  <label className="block text-xs font-bold text-navy-400 uppercase tracking-wide mb-2">
+                    INGRESO NETO (DESPUÉS DE IMPUESTOS)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-bold text-lg">$</span>
+                    <input 
+                      type="number"
+                      value={income}
+                      onChange={(e) => setIncome(Number(e.target.value))}
+                      className="w-full bg-white border border-surface-300 focus:border-teal-500 rounded-xl py-4 pl-8 pr-4 text-navy-900 font-bold text-lg transition-colors focus:outline-none focus:ring-4 focus:ring-teal-500/10 shadow-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Fixed Expenses Section */}
+              <div className="bg-white rounded-[2rem] p-6 sm:p-8 border border-surface-300/60 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <Home size={20} className="text-navy-700" />
+                  <h3 className="text-lg font-bold text-navy-900">Gastos Fijos</h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-bold text-navy-400 uppercase tracking-wide mb-2">
+                      VIVIENDA (RENTA/HIPOTECA)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-semibold">$</span>
+                      <input 
+                        type="number"
+                        value={housing}
+                        onChange={(e) => setHousing(Number(e.target.value))}
+                        className="w-full bg-surface-100 border border-transparent focus:border-teal-500 focus:bg-white rounded-xl py-3 pl-8 pr-4 text-navy-900 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-navy-400 uppercase tracking-wide mb-2">
+                      SERVICIOS BÁSICOS
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-navy-500 font-semibold">$</span>
+                      <input 
+                        type="number"
+                        value={utilities}
+                        onChange={(e) => setUtilities(Number(e.target.value))}
+                        className="w-full bg-surface-100 border border-transparent focus:border-teal-500 focus:bg-white rounded-xl py-3 pl-8 pr-4 text-navy-900 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Current Debts Section (Slider) */}
+              <div className="bg-white rounded-[2rem] p-6 sm:p-8 border border-surface-300/60 shadow-sm bg-gradient-to-br from-surface-100 to-white">
+                <div className="flex items-center gap-3 mb-6">
+                  <CreditCard size={20} className="text-navy-700" />
+                  <h3 className="text-lg font-bold text-navy-900">Deudas Actuales</h3>
+                </div>
+                <div>
+                  <div className="flex justify-between items-end mb-4">
+                    <label className="text-xs font-bold text-navy-400 uppercase tracking-wide">
+                      PAGOS MÍNIMOS MENSUALES
+                    </label>
+                    <span className="text-2xl font-bold text-navy-900">
+                      ${debts.toLocaleString()}
+                    </span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="5000" 
+                    step="50"
+                    value={debts}
+                    onChange={(e) => setDebts(Number(e.target.value))}
+                    className="w-full h-2 bg-surface-300 rounded-lg appearance-none cursor-pointer accent-navy-900 focus:outline-none"
+                    style={{
+                      background: `linear-gradient(to right, #0F172A ${(debts / 5000) * 100}%, #CBD5E1 ${(debts / 5000) * 100}%)`
+                    }}
+                  />
+                </div>
+                <div className="mt-8">
+                  <button className="w-full bg-teal-700 hover:bg-teal-800 text-white text-sm font-bold py-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm">
+                    <Activity size={18} />
+                    Calcular Capacidad
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* ── Right Column: Outputs ── */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Capacity Result Card */}
+              <div className="bg-white rounded-[2rem] p-8 sm:p-10 border border-surface-300/60 shadow-card text-center flex flex-col items-center">
+                <h3 className="text-sm font-bold text-navy-900 mb-2">
+                  Capacidad Disponible
+                </h3>
+                <div className="text-6xl font-bold text-teal-700 tracking-tight mb-2">
+                  ${availableCapacity.toLocaleString()}
+                </div>
+                <p className="text-sm text-surface-400 mb-10">por mes</p>
+                {/* SVG Semi-Circle Gauge */}
+                <div className="relative w-48 h-24 overflow-hidden mb-6">
+                  <svg className="w-full h-full transform" viewBox="0 0 140 70">
+                    {/* Background track */}
+                    <path 
+                      d="M 10,70 A 60,60 0 0,1 130,70" 
+                      fill="none" stroke="#E2E8F0" strokeWidth="16" strokeLinecap="round" 
+                    />
+                    {/* Value track */}
+                    <path 
+                      d="M 10,70 A 60,60 0 0,1 130,70" 
+                      fill="none" stroke={status.stroke} strokeWidth="16" strokeLinecap="round"
+                      strokeDasharray={circumference}
+                      strokeDashoffset={strokeDashoffset}
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                  {/* Status indicator inside the semi-circle */}
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-white px-3 py-1 rounded-full border border-surface-200 shadow-sm">
+                    <div className={`w-2 h-2 rounded-full ${status.bg}`}></div>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest ${status.color}`}>
+                      {status.text}
+                    </span>
+                  </div>
+                </div>
+                <div className="w-full h-px bg-surface-200 mb-6"></div>
+                <div className="w-full flex justify-between items-center">
+                  <span className="text-sm font-medium text-navy-500">Ratio Deuda-Ingreso</span>
+                  <span className="text-base font-bold text-navy-900">{dti}%</span>
+                </div>
+              </div>
+              {/* Strategic Insight Box */}
+              <div className="bg-[#E0E7FF] rounded-[2rem] p-8 border border-indigo-100 shadow-sm relative overflow-hidden">
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-indigo-500/10 rounded-full border-[16px] border-indigo-500/10"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <TrendingUp size={20} className="text-indigo-900" />
+                    <h3 className="text-base font-bold text-indigo-950">
+                      Análisis Estratégico
+                    </h3>
+                  </div>
+                  
+                  <p className="text-sm text-indigo-900 leading-relaxed mb-6">
+                    {status.text === "Saludable" 
+                      ? `Estás en una posición cómoda. Con $${availableCapacity.toLocaleString()} de capacidad mensual excedente, tienes espacio para financiar una compra moderada sin estresar tu presupuesto.`
+                      : status.text === "Precaución"
+                      ? `Tu presupuesto está ajustado. Con $${availableCapacity.toLocaleString()} disponibles, te recomendamos considerar consolidar tus deudas actuales para liberar flujo de efectivo antes de asumir un nuevo crédito.`
+                      : `Tu nivel de endeudamiento es alto. Es recomendable reducir tus deudas actuales antes de adquirir nuevos compromisos financieros para evitar estrés económico.`
+                    }
+                  </p>
+                  <div className="bg-indigo-900/5 rounded-xl p-4">
+                    <p className="text-xs text-indigo-950 font-medium">
+                      <span className="font-bold">Recomendación:</span> Mantén el total de tus pagos mensuales por debajo del 36% de tu ingreso neto para conservar un estado "Saludable".
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* ── Bottom Image ── */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="w-full h-48 sm:h-64 lg:h-80 rounded-[2rem] overflow-hidden shadow-sm relative">
+            {/* The mockup shows an illustration or lifestyle photo here */}
+            <img 
+              src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2000&auto=format&fit=crop" 
+              alt="Pareja revisando finanzas juntos" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/calculadoras/page.js
+
+import Link from "next/link"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
+import { Banknote, Calculator, Wallet, PiggyBank, TrendingUp, ArrowRight } from "lucide-react"
+export default function CalculadorasPage() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Calculadoras" />
+      <main className="flex-1 bg-surface-100 pb-20">
+        
+        {/* ── Header Section ── */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 text-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-navy-900 tracking-tight mb-5">
+            Calculadoras Financieras
+          </h1>
+          <p className="text-base sm:text-lg text-navy-600 leading-relaxed max-w-2xl mx-auto">
+            Toma el control de tus finanzas con nuestras herramientas interactivas. Simula escenarios, 
+            calcula costos y encuentra la mejor estrategia para tu dinero con total transparencia.
+          </p>
+        </section>
+        {/* ── Calculators Grid ── */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* Card 1: Simulador de Préstamos */}
+            <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-card flex flex-col h-full hover:shadow-card-hover transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-6 shrink-0">
+                <Banknote size={20} className="text-navy-700" />
+              </div>
+              <h3 className="text-xl font-bold text-navy-900 mb-4">
+                Simulador de Préstamos
+              </h3>
+              <p className="text-sm text-navy-600 leading-relaxed mb-8 flex-1">
+                Calcula tus cuotas mensuales, el interés total y visualiza la tabla de 
+                amortización para cualquier tipo de préstamo.
+              </p>
+              <Link href="/calculadoras/prestamos" className="w-full flex items-center justify-center gap-2 bg-[#5CE1E6] hover:bg-[#4ddbdc] text-teal-950 text-sm font-bold py-3.5 rounded-full transition-colors">
+                Iniciar Simulación
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+            {/* Card 2: Cálculo de CAT */}
+            <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-card flex flex-col h-full hover:shadow-card-hover transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-6 shrink-0">
+                <Calculator size={20} className="text-navy-700" />
+              </div>
+              <h3 className="text-xl font-bold text-navy-900 mb-4">
+                Cálculo de CAT
+              </h3>
+              <p className="text-sm text-navy-600 leading-relaxed mb-8 flex-1">
+                Descubre el Costo Anual Total real de tus tarjetas o créditos incluyendo 
+                comisiones, seguros e impuestos ocultos.
+              </p>
+              <Link href="/calculadoras/cat" className="w-full flex items-center justify-center gap-2 bg-transparent border border-surface-300 hover:bg-surface-200 text-navy-800 text-sm font-semibold py-3.5 rounded-full transition-colors">
+                Calcular CAT
+                <ArrowRight size={16} className="text-navy-500" />
+              </Link>
+            </div>
+            {/* Card 3: Capacidad de Pago */}
+            <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-card flex flex-col h-full hover:shadow-card-hover transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-6 shrink-0">
+                <Wallet size={20} className="text-navy-700" />
+              </div>
+              <h3 className="text-xl font-bold text-navy-900 mb-4">
+                Capacidad de Pago
+              </h3>
+              <p className="text-sm text-navy-600 leading-relaxed mb-8 flex-1">
+                Analiza tus ingresos y gastos para determinar exactamente cuánto 
+                puedes destinar a nuevas deudas sin riesgo.
+              </p>
+              <Link href="/calculadoras/capacidad" className="w-full flex items-center justify-center gap-2 bg-transparent border border-surface-300 hover:bg-surface-200 text-navy-800 text-sm font-semibold py-3.5 rounded-full transition-colors">
+                Evaluar Capacidad
+                <ArrowRight size={16} className="text-navy-500" />
+              </Link>
+            </div>
+            {/* Card 4: Ahorro por Consolidación (Spans 2 columns on large screens) */}
+            <div className="lg:col-span-2 bg-gradient-to-br from-surface-200/50 to-surface-300/30 rounded-[2rem] p-8 sm:p-10 border border-surface-300/60 shadow-card flex flex-col h-full hover:shadow-card-hover transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-surface-300 flex items-center justify-center mb-6 shrink-0">
+                <PiggyBank size={20} className="text-navy-800" />
+              </div>
+              <div className="max-w-md">
+                <h3 className="text-2xl font-bold text-navy-900 mb-4">
+                  Ahorro por Consolidación
+                </h3>
+                <p className="text-sm sm:text-base text-navy-600 leading-relaxed mb-8">
+                  ¿Tienes múltiples deudas? Descubre cuánto podrías ahorrar al mes y en 
+                  intereses totales si las unificas en un solo crédito con mejor tasa.
+                </p>
+                <Link href="/calculadoras/consolidacion" className="w-auto inline-flex items-center justify-center gap-2 bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold px-8 py-3.5 rounded-full transition-colors">
+                  Analizar Consolidación
+                  <ArrowRight size={16} className="text-navy-300" />
+                </Link>
+              </div>
+            </div>
+            {/* Card 5: Rendimiento de Inversión */}
+            <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-card flex flex-col h-full hover:shadow-card-hover transition-all duration-300">
+              <div className="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-6 shrink-0">
+                <TrendingUp size={20} className="text-navy-700" />
+              </div>
+              <h3 className="text-xl font-bold text-navy-900 mb-4">
+                Rendimiento de Inversión
+              </h3>
+              <p className="text-sm text-navy-600 leading-relaxed mb-8 flex-1">
+                Proyecta el crecimiento de tu dinero con el poder del interés 
+                compuesto a través del tiempo.
+              </p>
+              <button className="w-full flex items-center justify-center gap-2 bg-transparent border border-surface-300 hover:bg-surface-200 text-navy-800 text-sm font-semibold py-3.5 rounded-full transition-colors">
+                Proyectar Ganancias
+                <ArrowRight size={16} className="text-navy-500" />
+              </button>
+            </div>
+          </div>
+        </section>
+        {/* ── Bottom Image ── */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+          <div className="w-full h-64 sm:h-80 lg:h-[400px] rounded-[2rem] overflow-hidden shadow-sm">
+            <img 
+              src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2000&auto=format&fit=crop" 
+              alt="Persona calculando finanzas en su computadora portátil" 
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/calculadoras/consolidacion/page.js
+"use client"
+import { useState, useMemo } from "react"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+import { Trash2, PlusCircle, Sparkles } from "lucide-react"
+export default function ConsolidationPage() {
+  const [debts, setDebts] = useState([
+    { id: 1, type: "Tarjeta de Crédito", balance: 12500, rate: 21.5 },
+    { id: 2, type: "Préstamo Personal", balance: 8200, rate: 14.2 }
+  ])
+  // New consolidation loan estimated rate
+  const consolidationRate = 8.5
+  const termMonths = 36 // Assuming 3 years for comparison
+  const addDebt = () => {
+    const newId = debts.length > 0 ? Math.max(...debts.map(d => d.id)) + 1 : 1
+    setDebts([...debts, { id: newId, type: "Otra Deuda", balance: 0, rate: 0 }])
+  }
+  const removeDebt = (id) => {
+    setDebts(debts.filter(d => d.id !== id))
+  }
+  const updateDebt = (id, field, value) => {
+    setDebts(debts.map(d => d.id === id ? { ...d, [field]: value } : d))
+  }
+  // Calculate PMT (Monthly Payment)
+  const calculatePMT = (principal, annualRate, months) => {
+    if (principal <= 0) return 0
+    if (annualRate <= 0) return principal / months
+    const r = (annualRate / 100) / 12
+    return (principal * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1)
+  }
+  const { totalBalance, currentMonthly, newMonthly, savings } = useMemo(() => {
+    let totalBal = 0
+    let currMon = 0
+    debts.forEach(debt => {
+      totalBal += debt.balance
+      // Assuming existing debts are also amortized over the same term for a fair comparison,
+      // or we just calculate their specific PMT
+      currMon += calculatePMT(debt.balance, debt.rate, termMonths)
+    })
+    const newMon = calculatePMT(totalBal, consolidationRate, termMonths)
+    const sav = currMon - newMon
+    return {
+      totalBalance: totalBal,
+      currentMonthly: currMon,
+      newMonthly: newMon,
+      savings: sav > 0 ? sav : 0
+    }
+  }, [debts])
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Calculadoras" />
+      <main className="flex-1 bg-surface-100 pb-20">
+        
+        {/* Header */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 text-center lg:text-left">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 tracking-tight mb-4">
+            Recupera tu Claridad Financiera
+          </h1>
+          <p className="text-base sm:text-lg text-navy-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            Consolida tus múltiples deudas en un solo pago mensual manejable. 
+            Observa tus ahorros potenciales al instante con nuestra calculadora segura.
+          </p>
+        </section>
+        {/* Simulator Grid */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* ── Left Column: Inputs ── */}
+            <div className="lg:col-span-7">
+              <div className="bg-white rounded-[2rem] p-6 sm:p-10 border border-surface-300/60 shadow-sm relative">
+                
+                <h2 className="text-2xl font-bold text-navy-900 mb-8">Tus Deudas Actuales</h2>
+                <div className="space-y-6 mb-8">
+                  {debts.map((debt, index) => (
+                    <div key={debt.id} className="bg-surface-100 rounded-2xl p-4 sm:p-6 border border-surface-200 flex flex-col sm:flex-row gap-4 sm:gap-6 items-end relative group transition-all hover:border-teal-200 hover:shadow-sm">
+                      
+                      {/* Tipo de Deuda */}
+                      <div className="w-full sm:flex-1">
+                        <label className="block text-[10px] font-bold text-navy-400 uppercase tracking-wide mb-1.5">
+                          Tipo de Deuda
+                        </label>
+                        <input 
+                          type="text"
+                          value={debt.type}
+                          onChange={(e) => updateDebt(debt.id, 'type', e.target.value)}
+                          className="w-full bg-white border border-surface-300 focus:border-teal-500 rounded-xl py-2.5 px-4 text-navy-900 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                        />
+                      </div>
+                      {/* Saldo */}
+                      <div className="w-full sm:flex-1">
+                        <label className="block text-[10px] font-bold text-navy-400 uppercase tracking-wide mb-1.5">
+                          Saldo Pendiente
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-navy-400 font-semibold text-sm">$</span>
+                          <input 
+                            type="number"
+                            value={debt.balance === 0 ? '' : debt.balance}
+                            onChange={(e) => updateDebt(debt.id, 'balance', Number(e.target.value))}
+                            className="w-full bg-white border border-surface-300 focus:border-teal-500 rounded-xl py-2.5 pl-7 pr-3 text-navy-900 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                          />
+                        </div>
+                      </div>
+                      {/* Tasa */}
+                      <div className="w-full sm:w-28">
+                        <label className="block text-[10px] font-bold text-navy-400 uppercase tracking-wide mb-1.5">
+                          Tasa Anual
+                        </label>
+                        <div className="relative">
+                          <input 
+                            type="number"
+                            step="0.1"
+                            value={debt.rate === 0 ? '' : debt.rate}
+                            onChange={(e) => updateDebt(debt.id, 'rate', Number(e.target.value))}
+                            className="w-full bg-white border border-surface-300 focus:border-teal-500 rounded-xl py-2.5 pl-3 pr-7 text-navy-900 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                          />
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-navy-400 font-semibold text-sm">%</span>
+                        </div>
+                      </div>
+                      {/* Delete Button */}
+                      {debts.length > 1 && (
+                        <button 
+                          onClick={() => removeDebt(debt.id)}
+                          className="w-10 h-10 shrink-0 rounded-xl bg-white border border-surface-200 text-surface-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 flex items-center justify-center transition-colors"
+                          aria-label="Eliminar deuda"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {/* Add Debt Button */}
+                <button 
+                  onClick={addDebt}
+                  className="w-full border-2 border-dashed border-surface-300 hover:border-teal-400 bg-surface-50 hover:bg-teal-50/50 rounded-2xl py-4 flex items-center justify-center gap-2 text-sm font-bold text-navy-500 hover:text-teal-700 transition-all mb-8"
+                >
+                  <PlusCircle size={18} />
+                  AGREGAR OTRA DEUDA
+                </button>
+                <div className="h-px w-full bg-surface-200 mb-8"></div>
+                {/* Total Balance */}
+                <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end bg-surface-100 p-6 rounded-2xl border border-surface-200">
+                  <span className="text-sm font-bold text-navy-500 uppercase tracking-wider mb-2 sm:mb-0">
+                    Total Deuda Actual
+                  </span>
+                  <span className="text-4xl font-bold text-navy-900">
+                    ${totalBalance.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* ── Right Column: Outputs ── */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Savings Card */}
+              <div className="bg-teal-700 rounded-[2rem] p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                {/* Abstract graphic */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-teal-500 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none"></div>
+                
+                <div className="relative z-10">
+                  <h3 className="text-xs font-bold text-teal-100 uppercase tracking-widest mb-4">
+                    Ahorro Mensual Estimado
+                  </h3>
+                  
+                  <div className="flex items-baseline mb-6">
+                    <span className="text-6xl sm:text-7xl font-bold tracking-tighter">
+                      ${Math.round(savings).toLocaleString()}
+                    </span>
+                  </div>
+                  <p className="text-sm text-teal-100 leading-relaxed font-medium">
+                    Al consolidar en un solo préstamo de Krediteca con una tasa estimada del <strong className="text-white">{consolidationRate}% CAT</strong>.
+                  </p>
+                </div>
+              </div>
+              {/* Comparison Cards */}
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                
+                {/* Current */}
+                <div className="bg-surface-200 rounded-[2rem] p-6 sm:p-8 flex flex-col items-center justify-center text-center">
+                  <span className="text-[10px] font-bold text-navy-400 uppercase tracking-widest mb-3">
+                    MENSUALIDAD ACTUAL
+                  </span>
+                  <div className="text-3xl font-bold text-navy-900 mb-2">
+                    ${Math.round(currentMonthly).toLocaleString()}
+                  </div>
+                  <span className="text-xs font-medium text-surface-400 line-through decoration-surface-400">
+                    Múltiples Pagos
+                  </span>
+                </div>
+                {/* New */}
+                <div className="bg-white border border-teal-100 rounded-[2rem] p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-3 opacity-20">
+                    <Sparkles size={24} className="text-teal-600" />
+                  </div>
+                  <span className="text-[10px] font-bold text-teal-600 uppercase tracking-widest mb-3 relative z-10">
+                    NUEVA MENSUALIDAD
+                  </span>
+                  <div className="text-3xl font-bold text-teal-700 mb-2 relative z-10">
+                    ${Math.round(newMonthly).toLocaleString()}
+                  </div>
+                  <span className="text-xs font-medium text-teal-600 relative z-10">
+                    Pago Único
+                  </span>
+                </div>
+              </div>
+              {/* CTA Card */}
+              <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-sm text-center">
+                <h3 className="text-xl font-bold text-navy-900 mb-2">
+                  ¿Listo para simplificar?
+                </h3>
+                <p className="text-sm text-navy-500 mb-6 px-4">
+                  Revisa tu tasa personalizada sin impactar tu historial crediticio.
+                </p>
+                <button className="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-4 rounded-xl transition-colors">
+                  Ver Mis Opciones
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/calculadoras/prestamos/page.js
+"use client"
+import { useState, useMemo } from "react"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+import { ChevronDown, ArrowRight, ShieldCheck, ChevronRight } from "lucide-react"
+export default function PrestamosSimulatorPage() {
+  const [loanAmount, setLoanAmount] = useState(25000)
+  const [termLength, setTermLength] = useState(36) // months
+  const [creditScore, setCreditScore] = useState("excellent")
+  // Mock APR based on credit score
+  const rates = {
+    excellent: 8.4,
+    good: 12.5,
+    fair: 18.2,
+    poor: 24.5,
+  }
+  const annualRate = rates[creditScore] || 8.4
+  // Calculations
+  const { monthlyPayment, totalInterest } = useMemo(() => {
+    const p = loanAmount
+    const r = annualRate / 100 / 12 // monthly interest rate
+    const n = termLength
+    if (r === 0) return { monthlyPayment: p / n, totalInterest: 0 }
+    const payment = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+    const total = payment * n
+    const interest = total - p
+    return {
+      monthlyPayment: payment,
+      totalInterest: interest > 0 ? interest : 0,
+    }
+  }, [loanAmount, termLength, annualRate])
+  // Chart values
+  const totalAmount = loanAmount + totalInterest
+  const principalPercentage = (loanAmount / totalAmount) * 100
+  const interestPercentage = (totalInterest / totalAmount) * 100
+  // SVG Circle Logic for the doughnut chart
+  const radius = 40
+  const circumference = 2 * Math.PI * radius
+  const strokeDashoffset = circumference - (principalPercentage / 100) * circumference
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Calculadoras" />
+      <main className="flex-1 bg-surface-100 pb-20">
+        
+        {/* Header */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 tracking-tight mb-4">
+            Simulador de Préstamos Personales
+          </h1>
+          <p className="text-base sm:text-lg text-navy-600 leading-relaxed max-w-3xl">
+            Diseña tu estrategia de pago óptima. Ajusta los parámetros a continuación para ver un 
+            desglose en tiempo real de tu posible estructura de préstamo, completamente transparente.
+          </p>
+        </section>
+        {/* Simulator Grid */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* ── Left Column: Inputs ── */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Main Controls Card */}
+              <div className="bg-white rounded-[2rem] p-6 sm:p-10 border border-surface-300/60 shadow-card">
+                
+                {/* Loan Amount */}
+                <div className="mb-10">
+                  <div className="flex justify-between items-end mb-4">
+                    <label className="text-lg font-bold text-navy-900">Monto del Préstamo</label>
+                    <span className="text-3xl font-bold text-teal-600">
+                      ${loanAmount.toLocaleString()}
+                    </span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="1000" 
+                    max="100000" 
+                    step="1000"
+                    value={loanAmount}
+                    onChange={(e) => setLoanAmount(Number(e.target.value))}
+                    className="w-full h-2 bg-surface-200 rounded-lg appearance-none cursor-pointer accent-navy-900 focus:outline-none"
+                    style={{
+                      background: `linear-gradient(to right, #0F172A ${(loanAmount - 1000) / 99000 * 100}%, #E2E8F0 ${(loanAmount - 1000) / 99000 * 100}%)`
+                    }}
+                  />
+                  <div className="flex justify-between mt-2 text-xs font-semibold text-navy-400">
+                    <span>$1,000</span>
+                    <span>$100,000</span>
+                  </div>
+                </div>
+                {/* Term Length */}
+                <div className="mb-10">
+                  <div className="flex justify-between items-end mb-4">
+                    <label className="text-lg font-bold text-navy-900">Plazo</label>
+                    <span className="text-3xl font-bold text-teal-600">
+                      {termLength} <span className="text-xl">meses</span>
+                    </span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="12" 
+                    max="84" 
+                    step="12"
+                    value={termLength}
+                    onChange={(e) => setTermLength(Number(e.target.value))}
+                    className="w-full h-2 bg-surface-200 rounded-lg appearance-none cursor-pointer accent-navy-900 focus:outline-none"
+                    style={{
+                      background: `linear-gradient(to right, #0F172A ${(termLength - 12) / 72 * 100}%, #E2E8F0 ${(termLength - 12) / 72 * 100}%)`
+                    }}
+                  />
+                  <div className="flex justify-between mt-2 text-xs font-semibold text-navy-400">
+                    <span>12 Meses</span>
+                    <span>84 Meses</span>
+                  </div>
+                </div>
+                {/* Credit Score */}
+                <div>
+                  <label className="block text-lg font-bold text-navy-900 mb-4">
+                    Score Crediticio Estimado
+                  </label>
+                  <div className="relative">
+                    <select 
+                      value={creditScore}
+                      onChange={(e) => setCreditScore(e.target.value)}
+                      className="w-full appearance-none bg-surface-100 border border-surface-300 text-navy-900 font-semibold rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                    >
+                      <option value="excellent">Excelente (720 - 850)</option>
+                      <option value="good">Bueno (690 - 719)</option>
+                      <option value="fair">Regular (630 - 689)</option>
+                      <option value="poor">Malo (Menos de 630)</option>
+                    </select>
+                    <ChevronDown size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-navy-500 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+              {/* Mini Stats Cards */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-white rounded-3xl p-6 border border-surface-300/60 shadow-sm flex flex-col items-center justify-center text-center">
+                  <span className="text-navy-500 font-bold uppercase tracking-wider text-[10px] mb-2 flex items-center gap-1.5">
+                    EST. TASA ANUAL
+                  </span>
+                  <div className="text-3xl font-bold text-navy-900">
+                    {annualRate.toFixed(1)}%
+                  </div>
+                </div>
+                <div className="bg-white rounded-3xl p-6 border border-surface-300/60 shadow-sm flex flex-col items-center justify-center text-center">
+                  <span className="text-navy-500 font-bold uppercase tracking-wider text-[10px] mb-2 flex items-center gap-1.5">
+                    INTERÉS TOTAL
+                  </span>
+                  <div className="text-3xl font-bold text-navy-900">
+                    ${Math.round(totalInterest).toLocaleString()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* ── Right Column: Outputs ── */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Payment Results Card */}
+              <div className="bg-navy-900 rounded-[2rem] p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                {/* Background Pattern */}
+                <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
+                  <svg width="200" height="200" viewBox="0 0 100 100" fill="currentColor">
+                    <rect x="10" y="10" width="80" height="80" rx="10" />
+                    <rect x="25" y="25" width="20" height="50" rx="2" fill="white" />
+                    <rect x="55" y="25" width="20" height="50" rx="2" fill="white" />
+                  </svg>
+                </div>
+                <div className="relative z-10">
+                  <h3 className="text-xs font-bold text-navy-300 uppercase tracking-widest mb-2">
+                    Pago Mensual Estimado
+                  </h3>
+                  <div className="flex items-baseline mb-10 border-b border-navy-800 pb-10">
+                    <span className="text-6xl font-bold tracking-tight">
+                      ${Math.round(monthlyPayment).toLocaleString()}
+                    </span>
+                    <span className="text-xl text-navy-400 font-medium ml-2">/mo</span>
+                  </div>
+                  {/* Chart and Legend */}
+                  <div className="flex items-center gap-8 mb-10">
+                    {/* SVG Doughnut */}
+                    <div className="relative w-24 h-24 shrink-0">
+                      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        {/* Background track (Interest) */}
+                        <circle
+                          cx="50" cy="50" r={radius}
+                          fill="transparent" stroke="#0D9488" strokeWidth="12"
+                        />
+                        {/* Foreground track (Principal) */}
+                        <circle
+                          cx="50" cy="50" r={radius}
+                          fill="transparent" stroke="#818CF8" strokeWidth="12"
+                          strokeDasharray={circumference}
+                          strokeDashoffset={strokeDashoffset}
+                          strokeLinecap="round"
+                          className="transition-all duration-1000 ease-out"
+                        />
+                      </svg>
+                    </div>
+                    
+                    {/* Legend */}
+                    <div className="flex-1 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-indigo-400"></div>
+                          <span className="text-sm font-medium text-navy-200">Capital</span>
+                        </div>
+                        <span className="text-sm font-bold text-white">${Math.round(loanAmount).toLocaleString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-teal-600"></div>
+                          <span className="text-sm font-medium text-navy-200">Interés</span>
+                        </div>
+                        <span className="text-sm font-bold text-white">${Math.round(totalInterest).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-colors">
+                    Ver Tabla de Amortización
+                  </button>
+                </div>
+              </div>
+              {/* Top Matches Card */}
+              <div className="bg-white rounded-[2rem] p-8 border border-surface-300/60 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-bold text-navy-900">Mejores Opciones</h3>
+                  <span className="text-[10px] font-bold text-navy-400 uppercase tracking-wide">Basado en selección</span>
+                </div>
+                <div className="space-y-4">
+                  {/* Match 1 */}
+                  <div className="flex items-center justify-between group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-surface-100 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-surface-200 flex items-center justify-center text-navy-700 font-bold">
+                        B
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-navy-900">Banregio</h4>
+                        <p className="text-[11px] text-navy-500 font-medium">{annualRate}% CAT • Sin comisión apertura</p>
+                      </div>
+                    </div>
+                    <ChevronRight size={16} className="text-navy-400 group-hover:text-teal-600 transition-colors" />
+                  </div>
+                  
+                  {/* Match 2 */}
+                  <div className="flex items-center justify-between group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-surface-100 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-surface-200 flex items-center justify-center text-navy-700 font-bold">
+                        S
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-navy-900">Scotiabank</h4>
+                        <p className="text-[11px] text-navy-500 font-medium">{(annualRate + 0.3).toFixed(1)}% CAT • Fondeo rápido</p>
+                      </div>
+                    </div>
+                    <ChevronRight size={16} className="text-navy-400 group-hover:text-teal-600 transition-colors" />
+                  </div>
+                  {/* Match 3 */}
+                  <div className="flex items-center justify-between group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-surface-100 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-surface-200 flex items-center justify-center text-navy-700 font-bold">
+                        K
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-navy-900">Kueski</h4>
+                        <p className="text-[11px] text-navy-500 font-medium">{(annualRate + 1.2).toFixed(1)}% CAT • Términos flexibles</p>
+                      </div>
+                    </div>
+                    <ChevronRight size={16} className="text-navy-400 group-hover:text-teal-600 transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* ── Bottom CTA ── */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="relative rounded-[2rem] overflow-hidden">
+            <div className="absolute inset-0 bg-navy-900/80 z-10"></div>
+            <img 
+              src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2000&auto=format&fit=crop" 
+              alt="Asesor financiero" 
+              className="absolute inset-0 w-full h-full object-cover mix-blend-overlay"
+            />
+            <div className="relative z-20 text-center py-20 px-4 sm:px-10">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                ¿Listo para dar el siguiente paso?
+              </h2>
+              <p className="text-lg text-navy-100 max-w-2xl mx-auto mb-8">
+                Nuestros asesores están disponibles para revisar tu simulación y proporcionar 
+                orientación personalizada sobre tu solicitud de préstamo.
+              </p>
+              <button className="bg-white/20 hover:bg-white/30 text-white border border-white/40 font-semibold py-4 px-8 rounded-full backdrop-blur-md transition-all duration-300">
+                Hablar con un Asesor
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/page.js
+
+import Header from "./components/Header"
+import Hero from "./components/Hero"
+import TrustBadges from "./components/TrustBadges"
+import Features from "./components/Features"
+import TopLoans from "./components/TopLoans"
+import Footer from "./components/Footer"
+export default function Home() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1">
+        <Hero />
+        <TrustBadges />
+        <Features />
+        <TopLoans />
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/contacto/page.js
+import Header from "../components/Header"
+import Footer from "../components/Footer"
+import { Mail, Phone, Linkedin, Twitter, Facebook } from "lucide-react"
+import ContactForm from "../components/ContactForm"
+export default function ContactPage() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Sobre Nosotros" />
+      <main className="flex-1">
+        {/* ── Hero ── */}
+        <section className="text-center pt-16 pb-12 px-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-navy-900 leading-tight tracking-tight mb-5">
+            Estamos aquí para ayudarte
+          </h1>
+          <p className="text-base sm:text-lg text-navy-500 max-w-xl mx-auto leading-relaxed">
+            ¿Tienes dudas sobre nuestros comparadores o calculadoras? Nuestro equipo
+            de expertos está listo para brindarte la claridad financiera que necesitas.
+          </p>
+        </section>
+        {/* ── Contact grid ── */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+          <div className="grid lg:grid-cols-5 gap-6">
+            {/* ── Left column: info cards ── */}
+            <div className="lg:col-span-2 flex flex-col gap-5">
+              {/* Email card */}
+              <div className="bg-white rounded-2xl p-6 border border-surface-300/60 shadow-card">
+                <div className="flex items-start gap-4">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-50 shrink-0">
+                    <Mail size={20} className="text-teal-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-navy-900 mb-1">Correo Electrónico</h3>
+                    <p className="text-sm text-navy-500 leading-relaxed mb-3">
+                      Para consultas detalladas o soporte técnico.
+                    </p>
+                    <a
+                      href="mailto:hola@krediteca.com"
+                      className="text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+                    >
+                      hola@krediteca.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {/* Phone card */}
+              <div className="bg-white rounded-2xl p-6 border border-surface-300/60 shadow-card">
+                <div className="flex items-start gap-4">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-50 shrink-0">
+                    <Phone size={20} className="text-teal-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-navy-900 mb-1">Teléfono</h3>
+                    <p className="text-sm text-navy-500 leading-relaxed mb-3">
+                      Lunes a Viernes, 9:00 – 18:00 (CST).
+                    </p>
+                    <a
+                      href="tel:+525512345678"
+                      className="text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+                    >
+                      +52 55 1234 5678
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {/* Social card */}
+              <div className="bg-white rounded-2xl p-6 border border-surface-300/60 shadow-card">
+                <h3 className="font-bold text-navy-900 mb-4">Conecta con nosotros</h3>
+                <div className="flex items-center gap-3">
+                  {[
+                    { Icon: Linkedin, href: "#", label: "LinkedIn" },
+                    { Icon: Twitter, href: "#", label: "Twitter" },
+                    { Icon: Facebook, href: "#", label: "Facebook" },
+                  ].map(({ Icon, href, label }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      aria-label={label}
+                      className="flex items-center justify-center w-11 h-11 rounded-full bg-surface-200 hover:bg-navy-900 hover:text-white text-navy-600 transition-all duration-200"
+                    >
+                      <Icon size={18} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="lg:col-span-3">
+              <ContactForm />
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/blog/page.js
+import Header from "../components/Header"
+import Footer from "../components/Footer"
+import { BadgeCheck, Calculator, ChevronRight, Calendar, Clock } from "lucide-react"
+import Link from "next/link"
+import { getAllPosts, getAuthor } from "@/lib/blog"
+export default async function BlogPostPage() {
+  const posts = getAllPosts()
+  const latestPost = posts[0]
+  const otherPosts = posts.slice(1)
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Blog" />
+      <main className="flex-1 bg-surface-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+          
+          <div className="mb-12">
+            <h1 className="text-4xl font-bold text-navy-900 mb-4">Blog Financiero</h1>
+            <p className="text-lg text-navy-600 max-w-2xl">Aprende a tomar mejores decisiones financieras con nuestras guías, análisis y comparativas de mercado.</p>
+          </div>
+          <div className="flex flex-col lg:flex-row gap-10 xl:gap-16 items-start">
+            
+            {/* ── Main Content ── */}
+            <article className="flex-1 min-w-0 max-w-3xl">
+              
+              {latestPost && (
+                <div className="mb-16">
+                  <h2 className="text-xs font-bold text-navy-500 uppercase tracking-wider mb-6">Último Artículo</h2>
+                  <Link href={`/blog/${latestPost.category}/${latestPost.slug}`} className="group block">
+                    <figure className="mb-6">
+                      <div className="w-full h-64 sm:h-80 bg-surface-300 rounded-3xl overflow-hidden shadow-sm">
+                        <img 
+                          src={latestPost.frontmatter.image} 
+                          alt={latestPost.frontmatter.title} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    </figure>
+                    <div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="bg-navy-100 text-navy-800 text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                          {latestPost.category.replace("-", " ")}
+                        </span>
+                        <span className="flex items-center gap-1 text-xs font-medium text-navy-500">
+                          <Clock size={12} /> {latestPost.frontmatter.readingTime}
+                        </span>
+                      </div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-navy-900 leading-tight mb-3 group-hover:text-teal-600 transition-colors">
+                        {latestPost.frontmatter.title}
+                      </h3>
+                      <p className="text-navy-600 leading-relaxed mb-4 line-clamp-3">
+                        {latestPost.frontmatter.description}
+                      </p>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-600">
+                        Leer artículo completo <ChevronRight size={16} />
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )}
+              {/* Grid of older posts */}
+              {otherPosts.length > 0 && (
+                <div>
+                  <h2 className="text-xs font-bold text-navy-500 uppercase tracking-wider mb-6">Más Artículos</h2>
+                  <div className="grid sm:grid-cols-2 gap-8">
+                    {otherPosts.map((post) => (
+                      <Link key={post.slug} href={`/blog/${post.category}/${post.slug}`} className="group block">
+                        <div className="w-full h-48 bg-surface-300 rounded-2xl overflow-hidden shadow-sm mb-4">
+                          <img 
+                            src={post.frontmatter.image} 
+                            alt={post.frontmatter.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">
+                            {post.category.replace("-", " ")}
+                          </span>
+                        </div>
+                        <h4 className="text-lg font-bold text-navy-900 leading-snug mb-2 group-hover:text-teal-600 transition-colors line-clamp-2">
+                          {post.frontmatter.title}
+                        </h4>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </article>
+            {/* ── Right Sidebar (Widgets) ── */}
+            <aside className="hidden xl:block w-[300px] shrink-0 space-y-6 sticky top-28">
+              
+              {/* Simulator CTA Widget */}
+              <div className="bg-gradient-to-b from-teal-50 to-surface-100 rounded-3xl p-7 border border-teal-100/50 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full -mr-10 -mt-10 blur-2xl transition-transform group-hover:scale-150 duration-700"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6">
+                    <Calculator size={24} className="text-navy-900" />
+                  </div>
+                  <h3 className="text-lg font-bold text-navy-900 mb-3">
+                    Simula tu próximo préstamo
+                  </h3>
+                  <p className="text-sm text-navy-600 leading-relaxed mb-6">
+                    Calcula tus cuotas con transparencia total, sin impacto en tu historial.
+                  </p>
+                  <a 
+                    href="/#calculadoras" 
+                    className="w-full flex items-center justify-center bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold py-3 rounded-xl transition-colors"
+                  >
+                    Usar Calculadora
+                  </a>
+                </div>
+              </div>
+              {/* Related Articles Widget */}
+              <div className="bg-white rounded-3xl p-7 border border-surface-300/60 shadow-card">
+                <h3 className="text-base font-bold text-navy-900 mb-5">
+                  Artículos Relacionados
+                </h3>
+                <div className="space-y-5">
+                  <a href="#" className="block group">
+                    <h4 className="text-sm font-semibold text-navy-800 group-hover:text-teal-600 transition-colors line-clamp-2 mb-1.5 leading-snug">
+                      Las 5 mejores tarjetas para iniciar tu historial
+                    </h4>
+                    <p className="text-[11px] text-navy-500">Leer en 4 min</p>
+                  </a>
+                  <div className="h-px bg-surface-200"></div>
+                  <a href="#" className="block group">
+                    <h4 className="text-sm font-semibold text-navy-800 group-hover:text-teal-600 transition-colors line-clamp-2 mb-1.5 leading-snug">
+                      ¿Qué es el CAT y cómo afecta tus deudas?
+                    </h4>
+                    <p className="text-[11px] text-navy-500">Leer en 6 min</p>
+                  </a>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/blog/[categoria]/page.js
+import { getPostsByCategory, getAllCategories } from "@/lib/blog"
+import Header from "@/app/components/Header"
+import Footer from "@/app/components/Footer"
+import Link from "next/link"
+import { Clock, ChevronRight } from "lucide-react"
+export async function generateStaticParams() {
+  const categories = getAllCategories()
+  return categories.map((cat) => ({
+    categoria: cat,
+  }))
+}
+export async function generateMetadata({ params }) {
+  const { categoria } = await params
+  const formatName = categoria.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())
+  return {
+    title: `Artículos sobre ${formatName}`,
+    description: `Descubre nuestros mejores consejos y análisis financieros sobre ${formatName}.`,
+    alternates: {
+      canonical: `/blog/${categoria}`,
+    },
+  }
+}
+export default async function CategoryPage({ params }) {
+  const { categoria } = await params
+  const posts = getPostsByCategory(categoria)
+  const formatName = categoria.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Blog" />
+      <main className="flex-1 bg-surface-100">
+        {/* Breadcrumbs */}
+        <div className="bg-white border-b border-surface-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-2 text-xs font-semibold text-navy-500 uppercase tracking-wider">
+            <Link href="/" className="hover:text-teal-600">Inicio</Link>
+            <ChevronRight size={14} />
+            <Link href="/blog" className="hover:text-teal-600">Blog</Link>
+            <ChevronRight size={14} />
+            <span className="text-navy-800">{formatName}</span>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+          <div className="mb-12">
+            <h1 className="text-4xl font-bold text-navy-900 mb-4">{formatName}</h1>
+            <p className="text-lg text-navy-600 max-w-2xl">
+              Explora todos nuestros artículos relacionados con {formatName.toLowerCase()} y toma el control de tus finanzas.
+            </p>
+          </div>
+          {posts.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-navy-500">No hay artículos publicados en esta categoría todavía.</p>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts.map((post) => (
+                <Link key={post.slug} href={`/blog/${post.category}/${post.slug}`} className="group block bg-white rounded-3xl p-5 border border-surface-300 shadow-sm hover:shadow-md transition-all">
+                  <div className="w-full h-48 bg-surface-300 rounded-2xl overflow-hidden mb-5">
+                    <img 
+                      src={post.frontmatter.image} 
+                      alt={post.frontmatter.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="flex items-center gap-1 text-xs font-medium text-navy-500">
+                      <Clock size={12} /> {post.frontmatter.readingTime}
+                    </span>
+                  </div>
+                  <h4 className="text-xl font-bold text-navy-900 leading-snug mb-3 group-hover:text-teal-600 transition-colors line-clamp-2">
+                    {post.frontmatter.title}
+                  </h4>
+                  <p className="text-sm text-navy-600 line-clamp-2">
+                    {post.frontmatter.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/blog/[categoria]/[slug]/page.js
+import { getAllPosts, getPostBySlug, getAuthor } from "@/lib/blog"
+import { notFound } from "next/navigation"
+import { MDXRemote } from "next-mdx-remote/rsc"
+import { MDXComponents } from "@/app/components/mdx"
+import Header from "@/app/components/Header"
+import Footer from "@/app/components/Footer"
+import { BadgeCheck, Calendar, Clock, ChevronRight } from "lucide-react"
+import Link from "next/link"
+// 1. generateStaticParams para SSG 100% estático
+export async function generateStaticParams() {
+  const posts = getAllPosts()
+  return posts.map((post) => ({
+    categoria: post.category,
+    slug: post.slug,
+  }))
+}
+// 2. generateMetadata para SEO
+export async function generateMetadata({ params }) {
+  const { categoria, slug } = await params
+  const post = getPostBySlug(categoria, slug)
+  if (!post) return {}
+  const { title, description, image, publishedAt, updatedAt, author: authorId } = post.frontmatter
+  const author = getAuthor(authorId)
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: publishedAt,
+      modifiedTime: updatedAt || publishedAt,
+      authors: author ? [author.name] : [],
+      images: [image],
+    },
+    alternates: {
+      canonical: `/blog/${categoria}/${slug}`,
+    },
+  }
+}
+// 3. Page Component
+export default async function BlogPostPage({ params }) {
+  const { categoria, slug } = await params
+  const post = getPostBySlug(categoria, slug)
+  if (!post) notFound()
+  const { frontmatter, content } = post
+  const author = getAuthor(frontmatter.author)
+  const reviewer = frontmatter.reviewedBy ? getAuthor(frontmatter.reviewedBy) : author
+  // -- YMYL SCHEMA INJECTION (JSON-LD) --
+  // Article Schema
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: frontmatter.title,
+    image: frontmatter.image,
+    datePublished: frontmatter.publishedAt,
+    dateModified: frontmatter.updatedAt || frontmatter.publishedAt,
+    author: author ? {
+      "@type": "Person",
+      name: author.name,
+      url: author.linkedin || `https://krediteca.com/autores/${frontmatter.author}`,
+      jobTitle: author.role
+    } : undefined,
+    publisher: {
+      "@type": "Organization",
+      name: "Krediteca",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://krediteca.com/krediteca_logo_navbar.png"
+      }
+    },
+    reviewedBy: reviewer ? {
+      "@type": "Person",
+      name: reviewer.name,
+      url: reviewer.linkedin || `https://krediteca.com/autores/${frontmatter.reviewedBy}`,
+    } : undefined
+  }
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://krediteca.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://krediteca.com/blog" },
+      { "@type": "ListItem", position: 3, name: categoria, item: `https://krediteca.com/blog/${categoria}` },
+      { "@type": "ListItem", position: 4, name: frontmatter.title, item: `https://krediteca.com/blog/${categoria}/${slug}` }
+    ]
+  }
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Blog" />
+      {/* Inject Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <main className="flex-1 bg-surface-100 pb-24">
+        {/* Breadcrumbs UI */}
+        <div className="bg-white border-b border-surface-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-2 text-xs font-semibold text-navy-500 uppercase tracking-wider overflow-x-auto">
+            <Link href="/" className="hover:text-teal-600 shrink-0">Inicio</Link>
+            <ChevronRight size={14} className="shrink-0" />
+            <Link href="/blog" className="hover:text-teal-600 shrink-0">Blog</Link>
+            <ChevronRight size={14} className="shrink-0" />
+            <Link href={`/blog/${categoria}`} className="hover:text-teal-600 shrink-0">{categoria}</Link>
+          </div>
+        </div>
+        <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-16">
+          <header className="mb-10 text-center sm:text-left">
+            <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-navy-900 leading-tight tracking-tight mb-6">
+              {frontmatter.title}
+            </h1>
+            {/* Author & E-E-A-T Info */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 py-6 border-t border-b border-surface-300/60">
+              {author && (
+                <div className="flex items-center gap-4 text-left">
+                  <div className="w-12 h-12 rounded-full bg-surface-300 overflow-hidden shrink-0 shadow-sm">
+                    <img src={author.avatar} alt={author.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-navy-900 text-sm">{author.name}</span>
+                      <BadgeCheck size={16} className="text-teal-600" />
+                    </div>
+                    <p className="text-xs text-navy-500 mt-0.5">{author.role}</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-medium text-navy-500">
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={14} />
+                  Actualizado: {new Date(frontmatter.updatedAt || frontmatter.publishedAt).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock size={14} />
+                  {frontmatter.readingTime}
+                </div>
+              </div>
+            </div>
+          </header>
+          {/* Featured Image */}
+          {frontmatter.image && (
+            <figure className="mb-12">
+              <div className="w-full aspect-[21/9] sm:aspect-[2/1] bg-surface-300 rounded-3xl overflow-hidden shadow-sm">
+                <img 
+                  src={frontmatter.image} 
+                  alt={frontmatter.title} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </figure>
+          )}
+          {/* MDX Content rendered as Server Components */}
+          <div className="prose prose-navy prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-teal-600 prose-a:font-semibold hover:prose-a:text-teal-700">
+            <MDXRemote source={content} components={MDXComponents} />
+          </div>
+          {/* Tags */}
+          {frontmatter.tags && (
+            <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-surface-300">
+              {frontmatter.tags.map(tag => (
+                <span key={tag} className="px-4 py-2 bg-surface-200 text-navy-700 text-xs font-semibold rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </article>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/components/mdx/OfferCard.js
+import { getTopOffers } from "@/lib/affiliates/leadgid"
+import { ArrowRight, Star } from "lucide-react"
+import CompareButton from "../CompareButton"
+export default async function OfferCard({ slug }) {
+  const allOffers = await getTopOffers()
+  const offer = allOffers.find((o) => o.id === slug)
+  if (!offer) {
+    return (
+      <div className="p-4 bg-surface-100 border border-surface-300 rounded-xl text-center text-sm text-navy-500">
+        Oferta no disponible en este momento.
+      </div>
+    )
+  }
+  return (
+    <div className="my-8 bg-white rounded-2xl p-5 border border-surface-300/60 shadow-sm flex flex-col sm:flex-row items-center gap-6">
+      {/* Brand Icon */}
+      <div className={`w-14 h-14 rounded-2xl ${offer.color} flex items-center justify-center shrink-0 shadow-inner`}>
+        <span className="text-2xl font-bold text-white">{offer.initial}</span>
+      </div>
+      {/* Info */}
+      <div className="flex-1 text-center sm:text-left">
+        <h4 className="text-lg font-bold text-navy-900 m-0 leading-tight">
+          {offer.product}
+        </h4>
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-2">
+          <div className="flex items-center gap-1 text-sm font-semibold text-navy-700">
+            <Star size={14} className="text-amber-400 fill-amber-400" />
+            {offer.rating}
+          </div>
+          <span className="w-1 h-1 rounded-full bg-surface-300"></span>
+          <span className="text-xs text-navy-500 uppercase tracking-wider font-semibold">
+            CAT: {offer.cat}
+          </span>
+        </div>
+      </div>
+      {/* Actions */}
+      <div className="flex flex-col gap-2 w-full sm:w-auto shrink-0">
+        <a
+          href={`/api/go/${offer.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-1.5 bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all"
+        >
+          Solicitar <ArrowRight size={14} />
+        </a>
+        <CompareButton offerId={offer.id} />
+      </div>
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/components/mdx/Disclaimer.js
+import { ShieldAlert } from "lucide-react"
+export default function Disclaimer({ text }) {
+  return (
+    <div className="my-8 px-5 py-4 bg-surface-100 border border-surface-300 rounded-xl flex items-start gap-3">
+      <ShieldAlert className="text-navy-400 shrink-0 mt-0.5" size={18} />
+      <p className="text-[13px] text-navy-500 italic m-0 leading-relaxed">
+        {text}
+      </p>
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/components/mdx/index.js
+import Callout from "./Callout"
+import Disclaimer from "./Disclaimer"
+import OfferCard from "./OfferCard"
+export const MDXComponents = {
+  Callout,
+  Disclaimer,
+  OfferCard,
+}
+
+==================================================RUTA: ./src/app/components/mdx/Callout.js
+import { AlertTriangle, Info, CheckCircle } from "lucide-react"
+export default function Callout({ children, type = "info", title }) {
+  const styles = {
+    info: "bg-teal-50 border-teal-200 text-teal-900",
+    warning: "bg-amber-50 border-amber-200 text-amber-900",
+    success: "bg-emerald-50 border-emerald-200 text-emerald-900",
+  }
+  const icons = {
+    info: <Info className="text-teal-600" size={20} />,
+    warning: <AlertTriangle className="text-amber-600" size={20} />,
+    success: <CheckCircle className="text-emerald-600" size={20} />,
+  }
+  return (
+    <div className={`my-6 p-5 border rounded-2xl flex gap-4 ${styles[type]}`}>
+      <div className="shrink-0 mt-0.5">
+        {icons[type]}
+      </div>
+      <div>
+        {title && <h4 className="font-bold mb-1 m-0">{title}</h4>}
+        <div className="prose-sm m-0 leading-relaxed opacity-90">
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/components/TrustBadges.js
+import { Shield } from "lucide-react"
+const badges = [
+  { name: "CONDUSEF", weight: "font-bold" },
+  { name: "Banxico", weight: "font-bold" },
+  { name: "CNBV", weight: "font-bold" },
+  { name: "Buró de Crédito", weight: "font-bold" },
+]
+export default function TrustBadges() {
+  return (
+    <section className="border-y border-surface-300 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <p className="text-center text-[11px] font-semibold text-navy-400 uppercase tracking-[0.15em] mb-6">
+          Información verificada con fuentes oficiales
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14">
+          {badges.map((b) => (
+            <span
+              key={b.name}
+              className={`text-lg sm:text-xl text-navy-800 ${b.weight} tracking-tight`}
+            >
+              {b.name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+==================================================RUTA: ./src/app/components/CompareButton.js
+"use client"
+import { useState } from "react"
+import { Check } from "lucide-react"
+export default function CompareButton({ offerId }) {
+  const [isComparing, setIsComparing] = useState(false)
+  const handleCompareToggle = () => {
+    setIsComparing(!isComparing)
+    
+    // Aquí iría la lógica para interactuar con un contexto de "Comparador"
+    // Ejemplo:
+    // if (!isComparing) addOfferToComparison(offerId)
+    // else removeOfferFromComparison(offerId)
+  }
+  return (
+    <button 
+      onClick={handleCompareToggle}
+      className={`text-xs font-medium px-4 py-1.5 rounded-full border transition-all flex items-center gap-1 justify-center ${
+        isComparing 
+          ? "bg-teal-50 border-teal-200 text-teal-700" 
+          : "border-surface-300 text-navy-500 hover:text-navy-700 hover:bg-surface-50"
+      }`}
+    >
+      {isComparing ? (
+        <>
+          <Check size={12} />
+          En lista
+        </>
+      ) : (
+        "Comparar"
+      )}
+    </button>
+  )
+}
+
+==================================================RUTA: ./src/app/components/Features.js
+import { Eye, Clock, ShieldCheck, TrendingUp } from "lucide-react"
+const features = [
+  {
+    icon: Eye,
+    title: "Transparencia total",
+    description:
+      "Visualiza el desglose: cuánto pagas en intereses, comisiones y CAT real.",
+    detail: (
+      <div className="flex items-center gap-2 mt-4">
+        <span className="progress-chip bg-navy-900 text-white">Capital 65%</span>
+        <span className="progress-chip bg-teal-100 text-teal-700">Interés 23%</span>
+        <span className="progress-chip bg-surface-300 text-navy-600">CAT 18%</span>
+      </div>
+    ),
+  },
+  {
+    icon: Clock,
+    title: "Aprobación en minutos",
+    description:
+      "Compara, elige y solicita 100% en línea. Respuesta en menos de 3 minutos.",
+    detail: (
+      <div className="flex items-center gap-3 mt-4 text-xs font-semibold text-navy-500">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-teal-500" />
+          1. Compara
+        </span>
+        <span className="text-surface-400">→</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-teal-400" />
+          2. Solicita
+        </span>
+        <span className="text-surface-400">→</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-teal-300" />
+          3. Aprobado
+        </span>
+      </div>
+    ),
+  },
+  {
+    icon: ShieldCheck,
+    title: "Datos protegidos",
+    description:
+      "Encriptación de grado bancario. No vendemos tu información a terceros. Cumplimos LFPDPPP.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Construye tu historial",
+    description:
+      "¿Sin buró o historial bajo? Encuentra opciones para tu perfil y mejora tu score.",
+  },
+]
+export default function Features() {
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="grid sm:grid-cols-2 gap-5 stagger">
+        {features.map((f) => {
+          const Icon = f.icon
+          return (
+            <div
+              key={f.title}
+              className="group bg-white rounded-2xl p-7 border border-surface-300/60 shadow-card hover:shadow-card-hover transition-all duration-300 animate-fadeInUp"
+            >
+              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-surface-200 group-hover:bg-teal-50 transition-colors mb-5">
+                <Icon size={20} className="text-navy-700 group-hover:text-teal-600 transition-colors" />
+              </div>
+              <h3 className="text-lg font-bold text-navy-900 mb-2">
+                {f.title}
+              </h3>
+              <p className="text-sm text-navy-500 leading-relaxed">
+                {f.description}
+              </p>
+              {f.detail && f.detail}
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+==================================================RUTA: ./src/app/components/TopLoans.js
+import { Star, ArrowRight, ExternalLink } from "lucide-react"
+import { getTopOffers } from "@/lib/affiliates/leadgid"
+import CompareButton from "./CompareButton"
+export default async function TopLoans() {
+  const loans = await getTopOffers()
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      {/* Heading */}
+      <div className="mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-navy-900 mb-3">
+          Top préstamos personales este mes
+        </h2>
+        <div className="flex flex-wrap items-center gap-3 text-xs text-navy-400">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-surface-200 flex items-center justify-center text-[10px] font-bold text-navy-500">
+              AI
+            </div>
+            <span>
+              Revisado por <strong className="text-navy-600">Alonso Rodríguez</strong> · Experto en productos bancarios · Actualizado hoy
+            </span>
+          </div>
+        </div>
+      </div>
+      {/* Header row */}
+      <div className="hidden sm:flex items-center justify-end mb-2 pr-4">
+        <a
+          href="#ver-todos"
+          className="text-sm font-semibold text-navy-600 hover:text-teal-600 transition-colors flex items-center gap-1"
+        >
+          Ver todos <ArrowRight size={14} />
+        </a>
+      </div>
+      {/* Loan cards */}
+      <div className="space-y-4">
+        {loans.map((loan) => (
+          <div
+            key={loan.id}
+            className="group bg-white rounded-2xl border border-surface-300/60 shadow-card hover:shadow-card-hover transition-all duration-300 p-5 sm:p-6"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+              {/* Logo */}
+              <div
+                className={`shrink-0 w-14 h-14 ${loan.color} rounded-xl flex items-center justify-center text-white text-xl font-bold`}
+              >
+                {loan.initial}
+              </div>
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs text-navy-400 font-medium uppercase tracking-wide">
+                    {loan.bank}
+                  </span>
+                  {loan.badge && (
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${loan.badgeColor}`}
+                    >
+                      {loan.badge}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-base font-bold text-navy-900 mb-1">
+                  {loan.product}
+                </h3>
+                <div className="flex items-center gap-3 text-xs text-navy-400">
+                  <span className="flex items-center gap-0.5">
+                    <Star size={12} className="text-amber-400 fill-amber-400" />
+                    {loan.rating}
+                  </span>
+                  <span>·</span>
+                  <span>{loan.country}</span>
+                  <span>·</span>
+                  <span>{loan.regulatedBy}</span>
+                </div>
+              </div>
+              {/* CAT + Actions */}
+              <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+                <div className="text-right">
+                  <span className="block text-[10px] font-semibold text-navy-400 uppercase tracking-wide">
+                    CAT desde
+                  </span>
+                  <span className="text-2xl font-bold text-navy-900 tabular-nums">
+                    {loan.cat}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <a
+                    href={`/api/go/${loan.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold px-5 py-2 rounded-full transition-all"
+                  >
+                    Solicitar <ArrowRight size={14} />
+                  </a>
+                  <CompareButton offerId={loan.id} />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Mobile CTA */}
+      <div className="sm:hidden mt-6 text-center">
+        <a
+          href="#ver-todos"
+          className="text-sm font-semibold text-navy-600 hover:text-teal-600 transition-colors flex items-center justify-center gap-1"
+        >
+          Ver todos <ArrowRight size={14} />
+        </a>
+      </div>
+    </section>
+  )
+}
+
+==================================================RUTA: ./src/app/components/Header.js
+"use client"
+import { useState } from "react"
+import Link from "next/link"
+import { Menu, X } from "lucide-react"
+const navLinks = [
+  { label: "Préstamos", href: "/" },
+  { label: "Comparador", href: "/comparador" },
+  { label: "Calculadoras", href: "/calculadoras" },
+  { label: "Blog", href: "/blog" },
+  { label: "Sobre Nosotros", href: "/contacto" },
+]
+export default function Header({ activeLink = "Préstamos" }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  return (
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-surface-300/60">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center shrink-0">
+            <img 
+              src="/krediteca_logo_navbar.png" 
+              alt="Krediteca" 
+              className="h-8 w-auto" 
+            />
+          </Link>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => {
+              const isActive = link.label === activeLink
+              const isInternal = link.href.startsWith("/")
+              const Tag = isInternal ? Link : "a"
+              return (
+                <Tag
+                  key={link.label}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors ${
+                    isActive
+                      ? "text-navy-900 underline underline-offset-[6px] decoration-2 decoration-navy-900"
+                      : "text-navy-700 hover:text-navy-900"
+                  }`}
+                >
+                  {link.label}
+                </Tag>
+              )
+            })}
+          </nav>
+          {/* Actions */}
+          <div className="hidden md:flex items-center gap-4">
+            <a
+              href="#login"
+              className="text-sm font-medium text-navy-700 hover:text-navy-900 transition-colors"
+            >
+              Iniciar sesión
+            </a>
+            <a
+              href="#solicitar"
+              className="inline-flex items-center gap-1.5 bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all hover:shadow-lg hover:shadow-teal-500/20"
+            >
+              Solicitar
+            </a>
+          </div>
+          {/* Mobile toggle */}
+          <button
+            className="md:hidden p-2 -mr-2 text-navy-800"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <nav className="md:hidden py-4 border-t border-surface-300 animate-fadeIn">
+            <div className="flex flex-col gap-3">
+              {navLinks.map((link) => {
+                const isActive = link.label === activeLink
+                const isInternal = link.href.startsWith("/")
+                const Tag = isInternal ? Link : "a"
+                return (
+                  <Tag
+                    key={link.label}
+                    href={link.href}
+                    className={`text-sm font-medium py-2 ${
+                      isActive ? "text-navy-900 font-bold" : "text-navy-700"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Tag>
+                )
+              })}
+              <hr className="border-surface-300 my-1" />
+              <a href="#login" className="text-sm font-medium text-navy-700 py-2">
+                Iniciar sesión
+              </a>
+              <a
+                href="#solicitar"
+                className="inline-flex items-center justify-center bg-teal-500 text-white text-sm font-semibold px-5 py-2.5 rounded-full mt-1"
+              >
+                Solicitar
+              </a>
+            </div>
+          </nav>
+        )}
+      </div>
+    </header>
+  )
+}
+==================================================RUTA: ./src/app/components/Hero.js
+"use client"
+import { useState, useEffect } from "react"
+import { Check, ArrowRight } from "lucide-react"
+const benefits = [
+  "Sin afectar tu buró de crédito",
+  "100% en línea, sin filas",
+  "Respuesta en menos de 3 minutos",
+]
+export default function Hero() {
+  const [loanAmount, setLoanAmount] = useState(15000)
+  const [loanTerm, setLoanTerm] = useState(24)
+  /* Derived values */
+  const minAmount = 5000
+  const maxAmount = 50000
+  const minTerm = 6
+  const maxTerm = 48
+  const monthlyRate = 0.025 // illustrative 2.5% monthly
+  const monthlyPayment = Math.round(
+    (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) /
+      (Math.pow(1 + monthlyRate, loanTerm) - 1)
+  )
+  const amountProgress =
+    ((loanAmount - minAmount) / (maxAmount - minAmount)) * 100
+  const termProgress = ((loanTerm - minTerm) / (maxTerm - minTerm)) * 100
+  return (
+    <section className="relative overflow-hidden">
+      {/* Subtle bg decoration */}
+      <div className="absolute inset-0 bg-gradient-to-br from-surface-100 via-white to-teal-50/30 pointer-events-none" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        {/* Badge */}
+        <div className="mb-6">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy-600 uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+            Comparador financiero · México
+          </span>
+        </div>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* ── Left: copy ── */}
+          <div className="animate-fadeInUp">
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-navy-900 leading-[1.1] tracking-tight mb-6">
+              Préstamos que
+              <br />
+              respiran claridad.
+            </h1>
+            <p className="text-lg text-navy-600 leading-relaxed mb-8 max-w-lg">
+              Compara tasas, plazos y requisitos reales de bancos y fintech
+              mexicanas. Sin letras chiquitas, sin sorpresas.
+            </p>
+            <ul className="space-y-3 mb-10">
+              {benefits.map((b) => (
+                <li key={b} className="flex items-center gap-3">
+                  <span className="flex items-center justify-center w-5 h-5 rounded bg-teal-500/10">
+                    <Check size={14} className="text-teal-600" strokeWidth={3} />
+                  </span>
+                  <span className="text-sm font-medium text-navy-700">{b}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="#comparar"
+                className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold px-7 py-3.5 rounded-full transition-all hover:shadow-lg hover:shadow-teal-500/20"
+              >
+                Comparar préstamos
+                <ArrowRight size={16} />
+              </a>
+              <a
+                href="#como-funciona"
+                className="inline-flex items-center gap-2 border border-surface-400 hover:border-navy-300 text-navy-700 font-semibold px-7 py-3.5 rounded-full transition-all hover:bg-surface-200"
+              >
+                Cómo funciona
+              </a>
+            </div>
+          </div>
+          {/* ── Right: calculator card ── */}
+          <div className="animate-fadeInUp" style={{ animationDelay: "120ms" }}>
+            <div className="bg-white rounded-3xl p-8 shadow-elevated border border-surface-300/50">
+              <h2 className="text-lg font-bold text-navy-900 mb-8">
+                Calcula tu préstamo
+              </h2>
+              {/* Amount */}
+              <div className="mb-7">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-semibold text-navy-500 uppercase tracking-wider">
+                    Monto
+                  </label>
+                  <span className="text-2xl font-bold text-navy-900 tabular-nums">
+                    ${loanAmount.toLocaleString("es-MX")}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={minAmount}
+                  max={maxAmount}
+                  step={1000}
+                  value={loanAmount}
+                  onChange={(e) => setLoanAmount(parseInt(e.target.value))}
+                  className="loan-slider w-full"
+                  style={{ "--progress": `${amountProgress}%` }}
+                />
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[11px] text-navy-400">$5k</span>
+                  <span className="text-[11px] text-navy-400">$50k</span>
+                </div>
+              </div>
+              {/* Term */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-semibold text-navy-500 uppercase tracking-wider">
+                    Plazo (meses)
+                  </label>
+                  <span className="text-2xl font-bold text-navy-900 tabular-nums">
+                    {loanTerm}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={minTerm}
+                  max={maxTerm}
+                  step={6}
+                  value={loanTerm}
+                  onChange={(e) => setLoanTerm(parseInt(e.target.value))}
+                  className="loan-slider w-full"
+                  style={{ "--progress": `${termProgress}%` }}
+                />
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[11px] text-navy-400">6</span>
+                  <span className="text-[11px] text-navy-400">48</span>
+                </div>
+              </div>
+              {/* Result */}
+              <div className="border-t border-surface-300 pt-6 mb-6">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-navy-500">Pago mensual est.</span>
+                  <span className="text-3xl font-bold text-navy-900 tabular-nums">
+                    ${monthlyPayment.toLocaleString("es-MX")}
+                  </span>
+                </div>
+              </div>
+              <a
+                href="#opciones"
+                className="flex items-center justify-center gap-2 w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3.5 rounded-2xl transition-all hover:shadow-lg hover:shadow-teal-500/20"
+              >
+                Ver opciones disponibles
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+==================================================RUTA: ./src/app/components/ContactForm.js
+"use client"
+import { useState } from "react"
+import { ChevronDown } from "lucide-react"
+const subjects = [
+  "Duda sobre comparador de hipotecas",
+  "Duda sobre comparador de préstamos",
+  "Duda sobre tarjetas de crédito",
+  "Problema con mi cuenta",
+  "Sugerencias",
+  "Otro",
+]
+export default function ContactForm() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: subjects[0],
+    message: "",
+  })
+  const [subjectOpen, setSubjectOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const handleChange = (field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }))
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setSubmitted(true)
+    setTimeout(() => setSubmitted(false), 3000)
+  }
+  return (
+    <div className="bg-white rounded-2xl p-7 sm:p-9 border border-surface-300/60 shadow-elevated h-full">
+      <h2 className="text-2xl font-bold text-navy-900 mb-8">
+        Envíanos un mensaje
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Name + Email row */}
+        <div className="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">
+              Nombre completo
+            </label>
+            <input
+              type="text"
+              placeholder="Ej. Ana García"
+              value={form.name}
+              onChange={(e) => handleChange("name", e.target.value)}
+              className="w-full px-4 py-3 rounded-xl bg-surface-200 border border-surface-300 text-navy-900 text-sm placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">
+              Correo electrónico
+            </label>
+            <input
+              type="email"
+              placeholder="ana@ejemplo.com"
+              value={form.email}
+              onChange={(e) => handleChange("email", e.target.value)}
+              className="w-full px-4 py-3 rounded-xl bg-surface-200 border border-surface-300 text-navy-900 text-sm placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition-all"
+            />
+          </div>
+        </div>
+        {/* Subject dropdown */}
+        <div>
+          <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">
+            Asunto
+          </label>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setSubjectOpen(!subjectOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-surface-200 border border-surface-300 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition-all"
+            >
+              <span>{form.subject}</span>
+              <ChevronDown
+                size={16}
+                className={`text-navy-400 transition-transform ${subjectOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            {subjectOpen && (
+              <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-surface-300 rounded-xl shadow-elevated overflow-hidden animate-fadeIn">
+                {subjects.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      handleChange("subject", s)
+                      setSubjectOpen(false)
+                    }}
+                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-surface-200 transition-colors ${
+                      form.subject === s
+                        ? "text-teal-600 font-semibold bg-teal-50"
+                        : "text-navy-700"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        {/* Message textarea */}
+        <div>
+          <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">
+            Mensaje
+          </label>
+          <textarea
+            rows={5}
+            placeholder="¿En qué podemos ayudarte?"
+            value={form.message}
+            onChange={(e) => handleChange("message", e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-surface-200 border border-surface-300 text-navy-900 text-sm placeholder:text-navy-300 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition-all resize-none"
+          />
+        </div>
+        {/* Submit */}
+        <button
+          type="submit"
+          className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3.5 rounded-2xl transition-all hover:shadow-lg hover:shadow-teal-600/20"
+        >
+          {submitted ? (
+            <>
+              <span>¡Mensaje enviado!</span>
+              <span className="text-teal-200">✓</span>
+            </>
+          ) : (
+            <>
+              <span>Enviar Mensaje</span>
+            </>
+          )}
+        </button>
+      </form>
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/components/Footer.js
+const columns = [
+  {
+    title: "Productos",
+    links: [
+      { label: "Préstamos", href: "#" },
+      { label: "Tarjetas crédito", href: "#" },
+      { label: "Tarjetas débito", href: "#" },
+      { label: "Calculadoras", href: "#" },
+    ],
+  },
+  {
+    title: "Recursos",
+    links: [
+      { label: "Blog", href: "#" },
+      { label: "Glosario", href: "#" },
+      { label: "Guías", href: "#" },
+      { label: "Noticias", href: "#" },
+    ],
+  },
+  {
+    title: "Empresa",
+    links: [
+      { label: "Equipo editorial", href: "#" },
+      { label: "Metodología", href: "#" },
+      { label: "Cómo generamos ingresos", href: "#" },
+      { label: "Reglas editoriales", href: "#" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Términos", href: "#" },
+      { label: "Privacidad", href: "#" },
+      { label: "Cookies", href: "#" },
+      { label: "Contacto", href: "#" },
+    ],
+  },
+]
+export default function Footer() {
+  const currentYear = new Date().getFullYear()
+  return (
+    <footer className="border-t border-surface-300 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h4 className="text-[11px] font-bold text-navy-400 uppercase tracking-[0.12em] mb-4">
+                {col.title}
+              </h4>
+              <ul className="space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-navy-600 hover:text-navy-900 transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        {/* Bottom */}
+        <div className="border-t border-surface-300 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-2">
+            <img 
+              src="/krediteca_logo_navbar.png" 
+              alt="Krediteca" 
+              className="h-7 w-auto" 
+            />
+          </div>
+          <p className="text-xs text-navy-400 text-center sm:text-right">
+            © {currentYear} Krediteca · México
+          </p>
+        </div>
+        {/* Regulatory Disclaimer (YMYL) */}
+        <div className="text-[10px] sm:text-xs text-navy-400 leading-relaxed text-center max-w-4xl mx-auto border-t border-surface-300/50 pt-6">
+          <p className="mb-2">
+            <strong className="font-semibold text-navy-500">Aviso legal:</strong> Krediteca es una plataforma informativa y comparativa de productos financieros, no somos un banco, financiera, ni emitimos crédito directamente. No captamos recursos del público. Toda la información presentada (incluyendo tasas, CAT y plazos) es con fines ilustrativos y puede variar según la evaluación crediticia de cada institución.
+          </p>
+          <p>
+            Al usar nuestro sitio, aceptas nuestros Términos y Condiciones y Política de Privacidad. Para reportar cualquier anomalía financiera en México, puedes dirigirte a la <a href="https://www.condusef.gob.mx/" target="_blank" rel="noopener noreferrer" className="underline hover:text-navy-600">CONDUSEF</a>.
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+==================================================RUTA: ./src/app/private/dashboard/page.js
+import { getEPCStats } from "@/lib/db"
+import { BadgeDollarSign, MousePointerClick, ArrowRightLeft } from "lucide-react"
+export const dynamic = "force-dynamic" // Asegura que siempre consulte la DB en vivo
+export default function DashboardPage() {
+  const stats = getEPCStats()
+  return (
+    <div className="min-h-screen bg-surface-100 p-8">
+      <div className="max-w-5xl mx-auto">
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold text-navy-900">Dashboard de Atribución</h1>
+          <p className="text-navy-500 mt-2">Métricas de rendimiento de ofertas financieras (EPC)</p>
+        </header>
+        {stats.length === 0 ? (
+          <div className="bg-white p-10 rounded-2xl border border-surface-300 text-center text-navy-500">
+            Todavía no hay clics registrados en el sistema.
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-surface-300 overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-surface-200 border-b border-surface-300">
+                    <th className="px-6 py-4 text-xs font-bold text-navy-500 uppercase tracking-wider">Oferta (ID)</th>
+                    <th className="px-6 py-4 text-xs font-bold text-navy-500 uppercase tracking-wider text-right">Clics Totales</th>
+                    <th className="px-6 py-4 text-xs font-bold text-navy-500 uppercase tracking-wider text-right">Conversiones</th>
+                    <th className="px-6 py-4 text-xs font-bold text-navy-500 uppercase tracking-wider text-right">Ingresos (MXN)</th>
+                    <th className="px-6 py-4 text-xs font-bold text-teal-600 uppercase tracking-wider text-right bg-teal-50/50">EPC</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-200">
+                  {stats.map((row) => (
+                    <tr key={row.offer_id} className="hover:bg-surface-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <span className="font-semibold text-navy-900">{row.offer_id}</span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5 text-navy-700">
+                          <MousePointerClick size={14} className="text-navy-400" />
+                          {row.total_clicks}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5 text-navy-700">
+                          <ArrowRightLeft size={14} className="text-navy-400" />
+                          {row.total_conversions}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5 text-navy-700">
+                          <BadgeDollarSign size={14} className="text-emerald-500" />
+                          ${row.total_revenue.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-right bg-teal-50/30">
+                        <span className="font-bold text-teal-700 text-lg">
+                          ${row.epc}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/comparador/page.js
+"use client"
+import { useState, useMemo } from "react"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
+import {
+  Star,
+  ArrowRight,
+  ChevronDown,
+  Search,
+  SlidersHorizontal,
+  CreditCard,
+  X,
+} from "lucide-react"
+/* ── Card data ── */
+const allCards = [
+  {
+    id: 1,
+    issuer: "CITIBANAMEX",
+    name: "Simplicity",
+    rating: 4.8,
+    annuity: "Sin costo",
+    minIncome: 7000,
+    keyBenefit: "Meses sin intereses",
+    benefits: ["Meses sin Intereses"],
+    color: "from-slate-200 to-slate-300",
+    iconBg: "bg-gradient-to-br from-slate-100 to-slate-300",
+  },
+  {
+    id: 2,
+    issuer: "AMERICAN EXPRESS",
+    name: "Gold Elite Credit Card",
+    rating: 4.9,
+    annuity: "$1,700",
+    annuityNote: "1er año gratis",
+    minIncome: 15000,
+    keyBenefit: "Bebida gratis Starbucks",
+    benefits: ["Cashback"],
+    color: "from-slate-700 to-slate-900",
+    iconBg: "bg-gradient-to-br from-slate-600 to-slate-900",
+  },
+  {
+    id: 3,
+    issuer: "BBVA",
+    name: "Tarjeta Azul",
+    rating: 4.6,
+    annuity: "$748",
+    minIncome: 6000,
+    keyBenefit: "9% en Puntos BBVA",
+    benefits: ["Puntos de Viaje"],
+    color: "from-blue-800 to-blue-950",
+    iconBg: "bg-gradient-to-br from-blue-700 to-blue-950",
+  },
+  {
+    id: 4,
+    issuer: "NU",
+    name: "Nu Tarjeta de Crédito",
+    rating: 4.7,
+    annuity: "Sin costo",
+    minIncome: 0,
+    keyBenefit: "Sin comisiones ocultas",
+    benefits: ["Sin Anualidad"],
+    color: "from-purple-500 to-purple-700",
+    iconBg: "bg-gradient-to-br from-purple-400 to-purple-700",
+  },
+  {
+    id: 5,
+    issuer: "HSBC",
+    name: "2Now",
+    rating: 4.4,
+    annuity: "Sin costo",
+    minIncome: 8000,
+    keyBenefit: "2% cashback en todo",
+    benefits: ["Cashback", "Sin Anualidad"],
+    color: "from-red-600 to-red-800",
+    iconBg: "bg-gradient-to-br from-red-500 to-red-800",
+  },
+  {
+    id: 6,
+    issuer: "BANORTE",
+    name: "Mujer Banorte",
+    rating: 4.3,
+    annuity: "$850",
+    minIncome: 10000,
+    keyBenefit: "Seguros incluidos",
+    benefits: ["Meses sin Intereses"],
+    color: "from-red-700 to-red-900",
+    iconBg: "bg-gradient-to-br from-red-600 to-red-900",
+  },
+  {
+    id: 7,
+    issuer: "SCOTIABANK",
+    name: "Scotia Travel Platinum",
+    rating: 4.5,
+    annuity: "$1,200",
+    minIncome: 15000,
+    keyBenefit: "Millas en cada compra",
+    benefits: ["Puntos de Viaje"],
+    color: "from-red-500 to-red-700",
+    iconBg: "bg-gradient-to-br from-red-400 to-red-700",
+  },
+  {
+    id: 8,
+    issuer: "SANTANDER",
+    name: "Free",
+    rating: 4.2,
+    annuity: "Sin costo",
+    minIncome: 5000,
+    keyBenefit: "Sin anualidad de por vida",
+    benefits: ["Sin Anualidad", "Cashback"],
+    color: "from-red-600 to-red-800",
+    iconBg: "bg-gradient-to-br from-red-500 to-red-800",
+  },
+  {
+    id: 9,
+    issuer: "INBURSA",
+    name: "Clásica Inbursa",
+    rating: 4.0,
+    annuity: "$500",
+    minIncome: 4500,
+    keyBenefit: "Tasa preferencial",
+    benefits: ["Meses sin Intereses"],
+    color: "from-green-700 to-green-900",
+    iconBg: "bg-gradient-to-br from-green-600 to-green-900",
+  },
+]
+const benefitOptions = [
+  "Cashback",
+  "Puntos de Viaje",
+  "Sin Anualidad",
+  "Meses sin Intereses",
+]
+const issuerOptions = [
+  "Todos los emisores",
+  "CITIBANAMEX",
+  "AMERICAN EXPRESS",
+  "BBVA",
+  "NU",
+  "HSBC",
+  "BANORTE",
+  "SCOTIABANK",
+  "SANTANDER",
+  "INBURSA",
+]
+const sortOptions = ["Recomendadas", "Menor anualidad", "Mayor rating", "Menor ingreso"]
+export default function ComparadorPage() {
+  const [minIncome, setMinIncome] = useState(0)
+  const [selectedBenefits, setSelectedBenefits] = useState(["Puntos de Viaje"])
+  const [selectedIssuer, setSelectedIssuer] = useState("Todos los emisores")
+  const [issuerOpen, setIssuerOpen] = useState(false)
+  const [sortBy, setSortBy] = useState("Recomendadas")
+  const [sortOpen, setSortOpen] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(3)
+  const [mobileFilters, setMobileFilters] = useState(false)
+  const toggleBenefit = (b) => {
+    setSelectedBenefits((prev) =>
+      prev.includes(b) ? prev.filter((x) => x !== b) : [...prev, b]
+    )
+  }
+  const clearFilters = () => {
+    setMinIncome(0)
+    setSelectedBenefits([])
+    setSelectedIssuer("Todos los emisores")
+  }
+  const filtered = useMemo(() => {
+    let result = allCards.filter((c) => c.minIncome <= (minIncome || 90000))
+    if (selectedBenefits.length > 0) {
+      result = result.filter((c) =>
+        selectedBenefits.some((b) => c.benefits.includes(b))
+      )
+    }
+    if (selectedIssuer !== "Todos los emisores") {
+      result = result.filter((c) => c.issuer === selectedIssuer)
+    }
+    if (sortBy === "Mayor rating") result.sort((a, b) => b.rating - a.rating)
+    else if (sortBy === "Menor ingreso") result.sort((a, b) => a.minIncome - b.minIncome)
+    return result
+  }, [minIncome, selectedBenefits, selectedIssuer, sortBy])
+  const incomeProgress = (minIncome / 90000) * 100
+  /* ── Filter panel (shared between desktop sidebar + mobile drawer) ── */
+  const FilterPanel = ({ onClose }) => (
+    <div className="space-y-7">
+      {/* Heading */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-bold text-navy-900">Filtros</h3>
+        <button
+          onClick={clearFilters}
+          className="text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+        >
+          Limpiar
+        </button>
+      </div>
+      {/* Income slider */}
+      <div>
+        <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-3">
+          Ingresos Mínimos (Mensuales)
+        </label>
+        <input
+          type="range"
+          min={0}
+          max={90000}
+          step={1000}
+          value={minIncome}
+          onChange={(e) => setMinIncome(parseInt(e.target.value))}
+          className="loan-slider w-full"
+          style={{ "--progress": `${incomeProgress}%` }}
+        />
+        <div className="flex justify-between mt-1.5 text-[11px] text-navy-400">
+          <span>$0</span>
+          <span>${minIncome > 0 ? minIncome.toLocaleString("es-MX") : "—"}</span>
+          <span>$90,000+</span>
+        </div>
+      </div>
+      {/* Benefits checkboxes */}
+      <div>
+        <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-3">
+          Beneficios Principales
+        </label>
+        <div className="space-y-2.5">
+          {benefitOptions.map((b) => (
+            <label
+              key={b}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <span
+                className={`flex items-center justify-center w-5 h-5 rounded-md border-2 transition-all ${
+                  selectedBenefits.includes(b)
+                    ? "bg-teal-500 border-teal-500"
+                    : "border-surface-400 group-hover:border-navy-300"
+                }`}
+              >
+                {selectedBenefits.includes(b) && (
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path
+                      d="M2.5 6L5 8.5L9.5 3.5"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </span>
+              <span className="text-sm text-navy-700">{b}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+      {/* Issuer dropdown */}
+      <div>
+        <label className="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-3">
+          Emisor
+        </label>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIssuerOpen(!issuerOpen)}
+            className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface-200 border border-surface-300 text-sm text-navy-700 transition-all"
+          >
+            <span>{selectedIssuer}</span>
+            <ChevronDown
+              size={15}
+              className={`text-navy-400 transition-transform ${issuerOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+          {issuerOpen && (
+            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-surface-300 rounded-xl shadow-elevated max-h-48 overflow-y-auto animate-fadeIn">
+              {issuerOptions.map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => {
+                    setSelectedIssuer(opt)
+                    setIssuerOpen(false)
+                  }}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-surface-200 transition-colors ${
+                    selectedIssuer === opt
+                      ? "text-teal-600 font-semibold bg-teal-50"
+                      : "text-navy-700"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Mobile close */}
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="w-full bg-navy-900 text-white font-semibold py-3 rounded-2xl mt-4 lg:hidden"
+        >
+          Aplicar filtros
+        </button>
+      )}
+    </div>
+  )
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header activeLink="Comparador" />
+      <main className="flex-1">
+        {/* ── Hero ── */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-navy-900 tracking-tight mb-3">
+            Compara Tarjetas de Crédito
+          </h1>
+          <p className="text-base text-navy-500 max-w-xl leading-relaxed">
+            Encuentra la tarjeta perfecta para tu estilo de vida. Filtra por beneficios,
+            comisiones y requisitos para tomar la mejor decisión financiera.
+          </p>
+        </section>
+        {/* ── Content grid ── */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <div className="flex gap-8">
+            {/* ── Sidebar (desktop) ── */}
+            <aside className="hidden lg:block w-[260px] shrink-0">
+              <div className="bg-white rounded-2xl border border-surface-300/60 shadow-card p-6 sticky top-24">
+                <FilterPanel />
+              </div>
+            </aside>
+            {/* ── Main column ── */}
+            <div className="flex-1 min-w-0">
+              {/* Toolbar */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  {/* Mobile filter toggle */}
+                  <button
+                    onClick={() => setMobileFilters(true)}
+                    className="lg:hidden flex items-center gap-1.5 text-sm font-medium text-navy-700 bg-white border border-surface-300 rounded-xl px-4 py-2.5"
+                  >
+                    <SlidersHorizontal size={15} /> Filtros
+                  </button>
+                  <span className="text-sm text-navy-500">
+                    Mostrando{" "}
+                    <strong className="text-navy-800">{filtered.length}</strong>{" "}
+                    tarjetas encontradas
+                  </span>
+                </div>
+                {/* Sort dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setSortOpen(!sortOpen)}
+                    className="flex items-center gap-1.5 text-sm font-medium text-navy-600 hover:text-navy-900 transition-colors"
+                  >
+                    Ordenar por:{" "}
+                    <span className="font-semibold text-navy-900">{sortBy}</span>
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform ${sortOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {sortOpen && (
+                    <div className="absolute right-0 top-full mt-1 bg-white border border-surface-300 rounded-xl shadow-elevated w-48 z-20 animate-fadeIn">
+                      {sortOptions.map((opt) => (
+                        <button
+                          key={opt}
+                          onClick={() => {
+                            setSortBy(opt)
+                            setSortOpen(false)
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-surface-200 transition-colors ${
+                            sortBy === opt
+                              ? "text-teal-600 font-semibold"
+                              : "text-navy-700"
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* ── Card list ── */}
+              <div className="space-y-4">
+                {filtered.slice(0, visibleCount).map((card) => (
+                  <div
+                    key={card.id}
+                    className="group bg-white rounded-2xl border border-surface-300/60 shadow-card hover:shadow-card-hover transition-all duration-300 p-5 sm:p-6"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                      {/* Card icon */}
+                      <div
+                        className={`shrink-0 w-[100px] h-[65px] ${card.iconBg} rounded-xl flex items-center justify-center`}
+                      >
+                        <CreditCard size={28} className="text-white/90" />
+                      </div>
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-[11px] font-semibold text-navy-400 uppercase tracking-wider">
+                            {card.issuer}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-bold text-navy-900 mb-2">
+                          {card.name}
+                        </h3>
+                        {/* Details row */}
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-navy-500">
+                          <div>
+                            <span className="text-navy-400">Anualidad</span>
+                            <br />
+                            <span className="font-bold text-navy-800">
+                              {card.annuity}
+                            </span>{" "}
+                            {card.annuityNote && (
+                              <span className="text-navy-400">
+                                {card.annuityNote}
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <span className="text-navy-400">Ingreso Mín.</span>
+                            <br />
+                            <span className="font-bold text-navy-800">
+                              ${card.minIncome.toLocaleString("es-MX")}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-navy-400">Beneficio Clave</span>
+                            <br />
+                            <span className="font-bold text-teal-700">
+                              {card.keyBenefit}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Rating + Actions */}
+                      <div className="flex sm:flex-col items-center sm:items-end gap-3 shrink-0">
+                        <span className="flex items-center gap-1 text-sm font-semibold text-navy-700">
+                          <Star
+                            size={14}
+                            className="text-amber-400 fill-amber-400"
+                          />
+                          {card.rating}
+                        </span>
+                        <a
+                          href="#"
+                          className="inline-flex items-center justify-center gap-1.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold px-5 py-2 rounded-full transition-all whitespace-nowrap"
+                        >
+                          Solicitar ahora
+                        </a>
+                        <button className="text-xs font-medium text-navy-500 hover:text-navy-700 transition-colors border border-surface-300 rounded-full px-4 py-1.5 whitespace-nowrap">
+                          Comparar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Load more */}
+              {visibleCount < filtered.length && (
+                <div className="text-center mt-8">
+                  <button
+                    onClick={() => setVisibleCount((c) => c + 3)}
+                    className="text-sm font-semibold text-navy-600 hover:text-navy-900 border border-surface-400 hover:border-navy-300 rounded-full px-6 py-2.5 transition-all"
+                  >
+                    Cargar más tarjetas
+                  </button>
+                </div>
+              )}
+              {/* Transparency disclaimer */}
+              <div className="mt-10 bg-surface-200 border border-surface-300 rounded-xl p-5">
+                <p className="text-xs text-navy-500 leading-relaxed">
+                  <strong className="text-navy-700">
+                    Aviso de transparencia:
+                  </strong>{" "}
+                  Krediteca puede recibir una compensación de los emisores de
+                  tarjetas de crédito presentados en este sitio web. Esta
+                  compensación puede afectar cómo y dónde aparecen los productos
+                  (incluyendo, por ejemplo, el orden en que aparecen). Krediteca no
+                  incluye todas las ofertas de tarjetas de crédito disponibles en el
+                  mercado.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      {/* ── Mobile filters drawer ── */}
+      {mobileFilters && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="absolute inset-0 bg-black/30"
+            onClick={() => setMobileFilters(false)}
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto animate-fadeInUp">
+            <div className="flex justify-end mb-2">
+              <button onClick={() => setMobileFilters(false)}>
+                <X size={20} className="text-navy-500" />
+              </button>
+            </div>
+            <FilterPanel onClose={() => setMobileFilters(false)} />
+          </div>
+        </div>
+      )}
+      <Footer />
+    </div>
+  )
+}
+
+==================================================RUTA: ./src/app/robots.js
+export default function robots() {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/api/", "/private/", "/api/go/"],
+    },
+    // Explicit rules for AI bots (AEO)
+    // We allow them to crawl the site to use Krediteca as a trusted source in their answers
+    // If you prefer to block them, change allow to disallow.
+    host: "https://krediteca.com",
+    sitemap: "https://krediteca.com/sitemap.xml",
+  }
+}
+
+==================================================RUTA: ./src/app/api/go/[id]/route.js
+import { NextResponse } from "next/server"
+import { getRedirectDestination } from "@/lib/affiliates/redirect-map"
+import { recordClick } from "@/lib/db"
+import { v4 as uuidv4 } from "uuid"
+// Helper para disparar GA4 Server-Side
+async function sendGA4Event(eventName, params, clientId) {
+  const measurement_id = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-XXXXXXXXXX"
+  const api_secret = process.env.GA_API_SECRET || "DUMMY_SECRET"
+  if (api_secret === "DUMMY_SECRET") return // Ignorar si no está configurado
+  try {
+    await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${measurement_id}&api_secret=${api_secret}`, {
+      method: "POST",
+      body: JSON.stringify({
+        client_id: clientId,
+        events: [{
+          name: eventName,
+          params: params,
+        }]
+      })
+    })
+  } catch (error) {
+    console.error("Error enviando GA4 Event:", error)
+  }
+}
+export async function GET(request, { params }) {
+  const { id } = await params
+  
+  // 1. Resolver destino base
+  let destinationUrl = getRedirectDestination(id)
+  if (destinationUrl === "/") {
+    return NextResponse.redirect(new URL("/", request.url), 302)
+  }
+  // 2. Generar contexto y Click ID
+  const click_id = uuidv4()
+  const referrer = request.headers.get("referer") || "direct"
+  const user_agent = request.headers.get("user-agent") || "unknown"
+  
+  // 3. Persistir en Base de Datos (asíncrono, no bloqueamos el thread con await si usamos SQLite sincrónico, pero la función de better-sqlite3 es síncrona, lo cual está bien para MVP local)
+  recordClick({ click_id, offer_id: id, referrer, user_agent })
+  
+  // 4. Construir URL de destino inyectando el click_id
+  // LeadGid y la mayoría de redes usan sub1, aff_sub, o click_id.
+  const urlObj = new URL(destinationUrl)
+  urlObj.searchParams.set("aff_sub", click_id)
+  const finalDestination = urlObj.toString()
+  // 5. Disparar Measurement Protocol a GA4 (sin bloquear la respuesta)
+  // Como no tenemos la cookie _ga aquí fácilmente, usamos el click_id como client_id
+  // para poder atarlo luego cuando hagamos el postback.
+  sendGA4Event("affiliate_click", {
+    offer_id: id,
+    click_id: click_id,
+    origin_referrer: referrer
+  }, click_id)
+  // 6. Responder con HTTP 307 (Temporary Redirect) y protección SEO
+  const response = NextResponse.redirect(finalDestination, 307)
+  
+  // Evitar explícitamente que los motores de búsqueda indexen esta ruta
+  response.headers.set("X-Robots-Tag", "noindex, nofollow")
+  response.headers.set("Cache-Control", "no-store, max-age=0")
+  return response
+}
+
+==================================================RUTA: ./src/app/api/postback/leadgid/route.js
+import { NextResponse } from "next/server"
+import { updateConversion } from "@/lib/db"
+// Helper para disparar GA4 Server-Side
+async function sendGA4Conversion(clickId, payout, status) {
+  const measurement_id = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-XXXXXXXXXX"
+  const api_secret = process.env.GA_API_SECRET || "DUMMY_SECRET"
+  if (api_secret === "DUMMY_SECRET") return
+  try {
+    // Si la venta fue aprobada, enviamos un evento de compra/lead con el valor monetario
+    const eventName = status === "approved" ? "purchase" : "lead_rejected"
+    
+    await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${measurement_id}&api_secret=${api_secret}`, {
+      method: "POST",
+      body: JSON.stringify({
+        // Usamos el mismo click_id que usamos como client_id en el evento de click
+        // Esto permite a GA4 atar la conversión a la misma sesión.
+        client_id: clickId, 
+        events: [{
+          name: eventName,
+          params: {
+            currency: "MXN",
+            value: payout,
+            transaction_id: clickId, // Para evitar duplicados
+          },
+        }]
+      })
+    })
+  } catch (error) {
+    console.error("Error enviando GA4 Conversion:", error)
+  }
+}
+export async function GET(request) {
+  const { searchParams } = new URL(request.url)
+  
+  // 1. Autenticación Sencilla
+  // La red de afiliados debe configurar este secreto en la URL del postback
+  // Ej: https://krediteca.com/api/postback/leadgid?secret=SECRETO_AQUI&click_id={sub1}&status={status}&payout={payout}
+  const expectedSecret = process.env.POSTBACK_SECRET || "DUMMY_POSTBACK_SECRET"
+  const secret = searchParams.get("secret")
+  
+  if (secret !== expectedSecret) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+  // 2. Extraer parámetros de la red
+  const click_id = searchParams.get("click_id")
+  const status = searchParams.get("status") || "approved"
+  const payout = parseFloat(searchParams.get("payout") || "0")
+  if (!click_id) {
+    return NextResponse.json({ error: "Missing click_id" }, { status: 400 })
+  }
+  // 3. Reconciliar en Base de Datos
+  const success = updateConversion(click_id, status, payout)
+  if (!success) {
+    // El click_id no existe en nuestra DB (click falso o expirado)
+    return NextResponse.json({ error: "Click ID not found" }, { status: 404 })
+  }
+  // 4. Enviar Conversión a GA4
+  // No hacemos await para responderle rápido a la red de afiliados.
+  sendGA4Conversion(click_id, payout, status)
+  return NextResponse.json({ success: true, click_id, status, payout })
+}
+
+==================================================RUTA: ./src/app/globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ── Base resets ───────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-surface-100 text-navy-900 font-sans;
+  }
+}
+/* ── Loan calculator slider ───────────────────── */
+.loan-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  background: linear-gradient(
+    to right,
+    #14b8a6 0%,
+    #14b8a6 var(--progress, 50%),
+    #e5e8ed var(--progress, 50%),
+    #e5e8ed 100%
+  );
+}
+.loan-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #0B1B3F;
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(11, 27, 63, 0.25);
+  transition: transform 0.15s ease;
+}
+.loan-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.loan-slider::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #0B1B3F;
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(11, 27, 63, 0.25);
+}
+.loan-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: transparent;
+}
+/* ── Animations ───────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease-out both;
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out both;
+}
+/* Stagger children */
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 80ms; }
+.stagger > *:nth-child(3) { animation-delay: 160ms; }
+.stagger > *:nth-child(4) { animation-delay: 240ms; }
+/* ── Utility: progress bar chip ───────────────── */
+.progress-chip {
+  @apply inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full;
+}
+
+==================================================RUTA: ./src/content/authors/laura-gomez.json
+{
+  "id": "laura-gomez",
+  "name": "Laura Gómez",
+  "role": "Analista Financiera Senior",
+  "bio": "Especialista en crédito al consumo con más de 10 años de experiencia ayudando a mexicanos a sanear sus finanzas.",
+  "avatar": "https://ui-avatars.com/api/?name=Laura+Gomez&background=0D9488&color=fff&size=128",
+  "linkedin": "https://linkedin.com/in/lauragomez",
+  "twitter": "https://twitter.com/lauragomez"
+}
+
+==================================================RUTA: ./src/lib/db.js
+import Database from "better-sqlite3"
+import path from "path"
+// En desarrollo usamos un archivo local en la raíz.
+// En producción, esto se reemplazaría por Vercel Postgres, Turso, o similar.
+const dbPath = path.join(process.cwd(), "attribution.db")
+const db = new Database(dbPath)
+// Inicializar tabla si no existe
+db.pragma("journal_mode = WAL")
+db.exec(`
+  CREATE TABLE IF NOT EXISTS clicks (
+    click_id TEXT PRIMARY KEY,
+    offer_id TEXT NOT NULL,
+    referrer TEXT,
+    user_agent TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'pending',
+    payout REAL DEFAULT 0
+  )
+`)
+/**
+ * Registra un clic saliente en la base de datos.
+ */
+export function recordClick({ click_id, offer_id, referrer, user_agent }) {
+  const stmt = db.prepare(`
+    INSERT INTO clicks (click_id, offer_id, referrer, user_agent)
+    VALUES (?, ?, ?, ?)
+  `)
+  stmt.run(click_id, offer_id, referrer, user_agent)
+}
+/**
+ * Actualiza el clic cuando llega el postback (conversión) de la red.
+ */
+export function updateConversion(click_id, status, payout) {
+  const stmt = db.prepare(`
+    UPDATE clicks 
+    SET status = ?, payout = ? 
+    WHERE click_id = ?
+  `)
+  const info = stmt.run(status, payout, click_id)
+  return info.changes > 0
+}
+/**
+ * Agrega los clics para calcular el EPC en el dashboard.
+ */
+export function getEPCStats() {
+  const stmt = db.prepare(`
+    SELECT 
+      offer_id,
+      COUNT(*) as total_clicks,
+      SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as total_conversions,
+      SUM(payout) as total_revenue
+    FROM clicks
+    GROUP BY offer_id
+    ORDER BY total_revenue DESC, total_clicks DESC
+  `)
+  
+  const stats = stmt.all()
+  
+  // Calcular EPC
+  return stats.map(row => ({
+    ...row,
+    epc: row.total_clicks > 0 ? (row.total_revenue / row.total_clicks).toFixed(2) : "0.00"
+  }))
+}
+
+==================================================RUTA: ./src/lib/blog.js
+import fs from "fs"
+import path from "path"
+import matter from "gray-matter"
+import readingTime from "reading-time"
+const CONTENT_DIR = path.join(process.cwd(), "src/content")
+const BLOG_DIR = path.join(CONTENT_DIR, "blog")
+const AUTHORS_DIR = path.join(CONTENT_DIR, "authors")
+/**
+ * Recupera todos los posts del sistema de archivos.
+ * Extrae la categoría de la carpeta contenedora.
+ */
+export function getAllPosts() {
+  if (!fs.existsSync(BLOG_DIR)) return []
+  const categories = fs.readdirSync(BLOG_DIR)
+  const allPosts = []
+  categories.forEach((category) => {
+    const categoryPath = path.join(BLOG_DIR, category)
+    
+    // Ignorar si no es directorio
+    if (!fs.statSync(categoryPath).isDirectory()) return
+    const files = fs.readdirSync(categoryPath).filter(file => file.endsWith('.mdx') || file.endsWith('.md'))
+    files.forEach((file) => {
+      const slug = file.replace(/\.mdx?$/, "")
+      const filePath = path.join(categoryPath, file)
+      const fileContent = fs.readFileSync(filePath, "utf-8")
+      const { data, content } = matter(fileContent)
+      
+      // Ignorar posts en borrador
+      if (data.draft) return
+      allPosts.push({
+        slug,
+        category,
+        frontmatter: {
+          ...data,
+          readingTime: readingTime(content).text,
+        },
+        content
+      })
+    })
+  })
+  // Ordenar por fecha de publicación descendente
+  return allPosts.sort((a, b) => new Date(b.frontmatter.publishedAt) - new Date(a.frontmatter.publishedAt))
+}
+/**
+ * Obtiene un post específico por su categoría y slug.
+ */
+export function getPostBySlug(category, slug) {
+  const filePath = path.join(BLOG_DIR, category, `${slug}.mdx`)
+  
+  if (!fs.existsSync(filePath)) {
+    // Intentar con .md
+    const fallbackPath = path.join(BLOG_DIR, category, `${slug}.md`)
+    if (!fs.existsSync(fallbackPath)) return null
+    return parseFile(fallbackPath, slug, category)
+  }
+  return parseFile(filePath, slug, category)
+}
+function parseFile(filePath, slug, category) {
+  const fileContent = fs.readFileSync(filePath, "utf-8")
+  const { data, content } = matter(fileContent)
+  return {
+    slug,
+    category,
+    frontmatter: {
+      ...data,
+      readingTime: readingTime(content).text,
+    },
+    content,
+  }
+}
+/**
+ * Obtiene todos los posts de una categoría específica.
+ */
+export function getPostsByCategory(category) {
+  const allPosts = getAllPosts()
+  return allPosts.filter(post => post.category === category)
+}
+/**
+ * Obtiene la información del autor desde su archivo JSON.
+ */
+export function getAuthor(id) {
+  const filePath = path.join(AUTHORS_DIR, `${id}.json`)
+  if (!fs.existsSync(filePath)) return null
+  
+  const content = fs.readFileSync(filePath, "utf-8")
+  return JSON.parse(content)
+}
+/**
+ * Obtiene la lista única de categorías.
+ */
+export function getAllCategories() {
+  const posts = getAllPosts()
+  const categories = new Set(posts.map(post => post.category))
+  return Array.from(categories)
+}
+
+==================================================RUTA: ./src/lib/affiliates/leadgid.js
+import "server-only"
+// Fallback estático para asegurar que el sitio siempre renderice incluso si la API falla
+const fallbackOffers = [
+  {
+    id: "nu", // Este ID debe mapear con redirect-map.js
+    bank: "Nu",
+    product: "Préstamo personal Nu",
+    badge: "Selecto",
+    badgeColor: "bg-teal-100 text-teal-700",
+    rating: 4.6,
+    regulatedBy: "Regulado CNBV",
+    country: "México",
+    cat: "45.5%",
+    color: "bg-indigo-600",
+    initial: "N",
+  },
+  {
+    id: "mercadopago",
+    bank: "Mercado Pago",
+    product: "Crédito Mercado Pago",
+    badge: null,
+    rating: 4.4,
+    regulatedBy: "Regulado CNBV",
+    country: "México",
+    cat: "52.3%",
+    color: "bg-sky-500",
+    initial: "M",
+  },
+  {
+    id: "kueski",
+    bank: "Kueski",
+    product: "Kueski Pay",
+    badge: "Popular",
+    badgeColor: "bg-amber-100 text-amber-700",
+    rating: 4.2,
+    regulatedBy: "Regulado CNBV",
+    country: "México",
+    cat: "68.0%",
+    color: "bg-emerald-500",
+    initial: "K",
+  },
+]
+export async function getTopOffers() {
+  // Simularemos la arquitectura de LeadGid pero usaremos el fallback por ahora
+  
+  /*
+  // --- Futura implementación real con ISR ---
+  try {
+    const res = await fetch("https://api.leadgid.com/v1/offers", {
+      headers: {
+        Authorization: `Bearer ${process.env.LEADGID_API_KEY}`,
+      },
+      next: {
+        revalidate: 3600, // ISR: revalidar cada 1 hora
+        tags: ["offers"], // Permitirá revalidación bajo demanda vía webhook
+      },
+    });
+    if (!res.ok) {
+      console.error("LeadGid API failed:", res.statusText);
+      return fallbackOffers;
+    }
+    const data = await res.json();
+    return data.offers; // Asumiendo mapeo necesario
+  } catch (error) {
+    console.error("Error fetching offers from LeadGid:", error);
+    return fallbackOffers;
+  }
+  */
+  // Por ahora, para no bloquear el desarrollo, devolvemos el fallback instantáneamente
+  return fallbackOffers
+}
+
+==================================================RUTA: ./src/lib/affiliates/redirect-map.js
+// Mapa estático de destinos de afiliados
+// ID interno -> Destino final (Deeplink del afiliado)
+export const affiliateRedirectMap = {
+  nu: {
+    destination: "https://nu.com.mx/prestamo-personal?aff=krediteca", // Ejemplo ilustrativo
+    active: true,
+  },
+  mercadopago: {
+    destination: "https://www.mercadopago.com.mx/credito?aff=krediteca",
+    active: true,
+  },
+  kueski: {
+    destination: "https://kueski.com/?aff=krediteca",
+    active: true,
+  },
+}
+export function getRedirectDestination(id) {
+  const offer = affiliateRedirectMap[id]
+  if (!offer || !offer.active) {
+    // Fallback: Si no existe o está pausada, mandar al home o a una landing genérica
+    return "/"
+  }
+  return offer.destination
+}
+
+==================================================
+FIN DEL CONTEXTO DE CÓDIGO
+==================================================

@@ -1,5 +1,13 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+// El comparador es global: la bandeja debe vivir en el layout raíz para que la
+// selección persista al navegar entre /comparador, el home, etc. Aquí (servidor)
+// se arma el catálogo unificado; getTopOffers sigue server-only y solo cruza al
+// cliente su salida ya normalizada.
+import { getTopOffers } from "@/lib/affiliates/leadgid";
+import { allCards, normalizeCard, normalizeLoan } from "@/lib/catalog";
+import CompareProvider from "./components/compare/CompareProvider";
+import CompareWidget from "./components/compare/CompareWidget";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,7 +28,16 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  // Catálogo unificado para el comparador (tarjetas + préstamos normalizados).
+  // getTopOffers() y los normalizadores corren en el servidor; al cliente solo
+  // cruza `compareCatalog` (data pública ya serializada).
+  const loans = await getTopOffers();
+  const compareCatalog = [
+    ...allCards.map(normalizeCard),
+    ...loans.map(normalizeLoan),
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": ["FinancialService", "Organization"],
@@ -51,7 +68,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+        <CompareProvider catalog={compareCatalog}>
+          {children}
+          <CompareWidget />
+        </CompareProvider>
       </body>
     </html>
   );

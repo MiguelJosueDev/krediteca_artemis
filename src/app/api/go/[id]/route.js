@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getRedirectDestination } from "@/lib/affiliates/redirect-map"
-import { recordClick } from "@/lib/db"
+import { recordClick, linkDecisionClick } from "@/lib/db"
 import { v4 as uuidv4 } from "uuid"
 
 // Helper para disparar GA4 Server-Side
@@ -41,8 +41,12 @@ export async function GET(request, { params }) {
   const referrer = request.headers.get("referer") || "direct"
   const user_agent = request.headers.get("user-agent") || "unknown"
   
-  // 3. Persistir en Base de Datos (asíncrono, no bloqueamos el thread con await si usamos SQLite sincrónico, pero la función de better-sqlite3 es síncrona, lo cual está bien para MVP local)
+  // 3. Persistir en Base de Datos
   recordClick({ click_id, offer_id: id, referrer, user_agent })
+
+  // 3b. Si el CTA viene de una decisión de elegibilidad, atar click↔decisión para ML futuro.
+  const decisionId = new URL(request.url).searchParams.get("dec")
+  if (decisionId) linkDecisionClick({ decision_id: decisionId, click_id, offer_id: id })
   
   // 4. Construir URL de destino inyectando el click_id
   // LeadGid y la mayoría de redes usan sub1, aff_sub, o click_id.

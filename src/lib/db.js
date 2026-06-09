@@ -17,7 +17,15 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     status TEXT DEFAULT 'pending',
     payout REAL DEFAULT 0
-  )
+  );
+
+  CREATE TABLE IF NOT EXISTS decision_clicks (
+    decision_id TEXT NOT NULL,
+    click_id    TEXT NOT NULL,
+    offer_id    TEXT NOT NULL,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (decision_id, click_id)
+  );
 `)
 
 /**
@@ -42,6 +50,18 @@ export function updateConversion(click_id, status, payout) {
   `)
   const info = stmt.run(status, payout, click_id)
   return info.changes > 0
+}
+
+/**
+ * Ata una decisión de elegibilidad con el click_id generado en /api/go/[id].
+ * Cierra el loop: decision.payload (features point-in-time) + clicks.status (outcome).
+ */
+export function linkDecisionClick({ decision_id, click_id, offer_id }) {
+  const stmt = db.prepare(`
+    INSERT OR IGNORE INTO decision_clicks (decision_id, click_id, offer_id)
+    VALUES (?, ?, ?)
+  `)
+  stmt.run(decision_id, click_id, offer_id)
 }
 
 /**

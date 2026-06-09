@@ -1,30 +1,31 @@
 "use client"
 
-import { useState } from "react"
 import { Check } from "lucide-react"
+import { useCompare } from "./compare/CompareProvider"
 
-export default function CompareButton({ offerId }) {
-  const [isComparing, setIsComparing] = useState(false)
-
-  const handleCompareToggle = () => {
-    setIsComparing(!isComparing)
-    
-    // Aquí iría la lógica para interactuar con un contexto de "Comparador"
-    // Ejemplo:
-    // if (!isComparing) addOfferToComparison(offerId)
-    // else removeOfferFromComparison(offerId)
-  }
+/**
+ * Botón "Comparar" / "En lista".
+ * `itemKey` es la clave tipada del catálogo: `card:3`, `loan:kueski`.
+ * El estado vive en el contexto global (persistido en localStorage), no aquí,
+ * para que la bandeja y los demás botones reaccionen a la misma selección.
+ */
+export default function CompareButton({ itemKey }) {
+  const { has, toggle, count, max } = useCompare()
+  const selected = has(itemKey)
+  const atLimit = !selected && count >= max
 
   return (
-    <button 
-      onClick={handleCompareToggle}
-      className={`text-xs font-medium px-4 py-1.5 rounded-full border transition-all flex items-center gap-1 justify-center ${
-        isComparing 
-          ? "bg-teal-50 border-teal-200 text-teal-700" 
+    <button
+      onClick={() => toggle(itemKey)}
+      disabled={atLimit}
+      title={atLimit ? `Máximo ${max} para comparar` : undefined}
+      className={`text-xs font-medium px-4 py-1.5 rounded-full border transition-all flex items-center gap-1 justify-center disabled:opacity-40 disabled:cursor-not-allowed ${
+        selected
+          ? "bg-teal-50 border-teal-200 text-teal-700"
           : "border-surface-300 text-navy-500 hover:text-navy-700 hover:bg-surface-50"
       }`}
     >
-      {isComparing ? (
+      {selected ? (
         <>
           <Check size={12} />
           En lista

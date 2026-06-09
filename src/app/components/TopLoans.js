@@ -83,7 +83,7 @@ export default async function TopLoans() {
               <div className="flex items-center gap-4 sm:gap-6 shrink-0">
                 <div className="text-right">
                   <span className="block text-[10px] font-semibold text-navy-400 uppercase tracking-wide">
-                    CAT desde
+                    {loan.catLabel || "CAT desde"}
                   </span>
                   <span className="text-2xl font-bold text-navy-900 tabular-nums">
                     {loan.cat}
@@ -99,7 +99,7 @@ export default async function TopLoans() {
                   >
                     Solicitar <ArrowRight size={14} />
                   </a>
-                  <CompareButton offerId={loan.id} />
+                  <CompareButton itemKey={`loan:${loan.id}`} />
                 </div>
               </div>
             </div>
